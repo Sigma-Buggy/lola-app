@@ -228,12 +228,43 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
 <body>
 
 <!-- LANG OVERLAY -->
-<div class="overlay hidden" id="lang-overlay">
+<div class="overlay" id="lang-overlay">
   <div class="lang-title">LOLA System</div>
   <div class="lang-sub">Love · Observation · Logic · Analysis<br>Выбери язык · Тілді таңда · Choose language</div>
   <button class="lang-btn" onclick="setLang('ru')"><span class="flag">🇷🇺</span> Русский</button>
   <button class="lang-btn" onclick="setLang('kz')"><span class="flag">🇰🇿</span> Қазақша</button>
   <button class="lang-btn" onclick="setLang('en')"><span class="flag">🇬🇧</span> English</button>
+</div>
+
+
+<!-- WELCOME / ABOUT SCREEN -->
+<div class="overlay hidden" id="welcome-overlay" style="background:var(--navy);overflow-y:auto;padding:0">
+  <div style="max-width:440px;margin:0 auto;padding:24px 24px 40px">
+    <!-- Logo -->
+    <div style="text-align:center;padding:20px 0 16px">
+      <div style="font-family:'Playfair Display',serif;font-size:30px;color:#fff;margin-bottom:4px">LOLA System</div>
+      <div style="font-size:11px;color:var(--peachl);letter-spacing:1.2px;text-transform:uppercase">Love · Observation · Logic · Analysis</div>
+    </div>
+    <!-- Hero -->
+    <div style="background:rgba(255,255,255,.07);border-radius:16px;padding:18px;margin-bottom:20px;border:1px solid rgba(255,255,255,.1)">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;color:#fff;margin-bottom:8px;line-height:1.4" id="welcome-title">Поддержка мамы. Каждый день.</div>
+      <div style="font-size:13px;color:var(--peachl);line-height:1.65" id="welcome-desc">Это приложение создано для мам детей с особыми потребностями. Оно помогает не потерять себя в заботе о ребёнке — находить точки опоры каждый день.</div>
+    </div>
+    <!-- For whom -->
+    <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px" id="welcome-for-whom-lbl">Для кого</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px" id="welcome-for-whom"></div>
+    <!-- What inside -->
+    <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px" id="welcome-inside-lbl">Что внутри</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px" id="welcome-inside"></div>
+    <!-- Trial -->
+    <div style="background:rgba(232,149,109,.15);border:1px solid rgba(232,149,109,.3);border-radius:12px;padding:14px;text-align:center;margin-bottom:20px">
+      <div style="font-family:'Playfair Display',serif;font-size:32px;color:var(--peach)">7</div>
+      <div style="font-size:12px;color:var(--peachl);margin-top:2px" id="welcome-trial-lbl">дней бесплатно — все функции открыты</div>
+    </div>
+    <!-- CTA -->
+    <button onclick="startFromWelcome()" style="width:100%;padding:16px;border-radius:14px;border:none;background:var(--peach);color:#fff;font-size:16px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer" id="welcome-cta">Начать →</button>
+    <div style="font-size:11px;color:rgba(255,255,255,.3);text-align:center;margin-top:10px" id="welcome-author">Автор: Рабига Сагындыкова · lola.system</div>
+  </div>
 </div>
 
 <!-- ONBOARDING OVERLAY -->
@@ -274,57 +305,15 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
 
     <!-- CARDS -->
     <div class="screen active" id="screen-cards">
-      <div class="cat-row" id="cat-row"><div class="cat-chip" style="background:#fff;color:#7B6BAE;border-color:#7B6BAE40" onclick="selectCat('mind')">Мысли</div><div class="cat-chip" style="background:#fff;color:#E8956D;border-color:#E8956D40" onclick="selectCat('self')">Забота</div><div class="cat-chip" style="background:#fff;color:#4A7FA5;border-color:#4A7FA540" onclick="selectCat('family')">Близкие</div><div class="cat-chip" style="background:#fff;color:#5A9B87;border-color:#5A9B8740" onclick="selectCat('growth')">Рост</div><div class="cat-chip" style="background:#fff;color:#1B2A4A;border-color:#1B2A4A40" onclick="selectCat('plan')">Дела</div><div class="cat-chip" style="background:#C4892A;color:#fff;border-color:#C4892A" onclick="selectCat('budget')">Бюджет</div></div>
+      <div class="cat-row" id="cat-row"></div>
       <div class="streak-wrap">
         <div class="streak-top">
           <span class="streak-lbl" id="streak-lbl">Серия недели</span>
-          <span class="streak-cnt" id="streak-cnt">1 / 7</span>
+          <span class="streak-cnt" id="streak-cnt">0 / 7</span>
         </div>
-        <div class="streak-days" id="streak-days">
-    <div class="s-day">
-      <div class="s-dot "></div>
-      <span class="s-lbl">Пн</span>
-    </div>
-    <div class="s-day">
-      <div class="s-dot "></div>
-      <span class="s-lbl">Вт</span>
-    </div>
-    <div class="s-day">
-      <div class="s-dot "></div>
-      <span class="s-lbl">Ср</span>
-    </div>
-    <div class="s-day">
-      <div class="s-dot "></div>
-      <span class="s-lbl">Чт</span>
-    </div>
-    <div class="s-day">
-      <div class="s-dot done"></div>
-      <span class="s-lbl">Пт</span>
-    </div>
-    <div class="s-day">
-      <div class="s-dot today"></div>
-      <span class="s-lbl">Сб</span>
-    </div>
-    <div class="s-day">
-      <div class="s-dot "></div>
-      <span class="s-lbl">Вс</span>
-    </div></div>
+        <div class="streak-days" id="streak-days"></div>
       </div>
-      <div class="card-wrap" id="card-wrap">
-    <div class="day-card" style="background:#FBF3E8">
-      <div class="card-deco" style="background:#C4892A"></div>
-      <div class="card-cat" style="color:#C4892A">Бюджет</div>
-      <div class="card-text">Запиши все расходы на реабилитацию за эту неделю. Сколько вышло?</div>
-      <div class="card-counter">
-        <span>Карточка 1 из 12</span>
-        
-      </div>
-      <div class="card-nav">
-        <button class="btn-prev" onclick="gotoCard('budget',11)">‹</button>
-        <button class="btn-done" onclick="markDone('budget',0)" style="background:#C4892A;color:#fff">✓  Сделала</button>
-        <button class="btn-next" onclick="gotoCard('budget',1)">›</button>
-      </div>
-    </div></div>
+      <div class="card-wrap" id="card-wrap"></div>
     </div>
 
     <!-- TRACKER -->
@@ -332,104 +321,20 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
       <div id="tracker-help-wrap">
         <div class="help-chip" onclick="toggleHelp('tracker')">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <span id="tracker-help-lbl">Как пользоваться трекером</span>
+          <span id="tracker-help-lbl"></span>
         </div>
         <div class="help-box hidden" id="tracker-help-box"></div>
       </div>
-      <div class="sec-head"><span class="sec-title" id="this-week-lbl">Эта неделя</span><span class="sec-sub" id="week-dates">4.5–10.5</span></div>
-      <div class="week-card"><div class="week-grid" id="week-grid">
-    <div class="day-cell">
-      <span class="day-name">Пн</span>
-      <div class="day-box  " onclick="toggleDay(0)">
-        
-      </div>
-    </div>
-    <div class="day-cell">
-      <span class="day-name">Вт</span>
-      <div class="day-box  " onclick="toggleDay(1)">
-        
-      </div>
-    </div>
-    <div class="day-cell">
-      <span class="day-name">Ср</span>
-      <div class="day-box  " onclick="toggleDay(2)">
-        
-      </div>
-    </div>
-    <div class="day-cell">
-      <span class="day-name">Чт</span>
-      <div class="day-box  " onclick="toggleDay(3)">
-        
-      </div>
-    </div>
-    <div class="day-cell">
-      <span class="day-name">Пт</span>
-      <div class="day-box done " onclick="toggleDay(4)">
-        ✓
-      </div>
-    </div>
-    <div class="day-cell">
-      <span class="day-name">Сб</span>
-      <div class="day-box  today" onclick="toggleDay(5)">
-        
-      </div>
-    </div>
-    <div class="day-cell">
-      <span class="day-name">Вс</span>
-      <div class="day-box  " onclick="toggleDay(6)">
-        
-      </div>
-    </div></div></div>
-      <div class="sec-head"><span class="sec-title" id="lola-mod-lbl">Занятия LOLA</span><span class="sec-sub" id="tap-dots-lbl">нажми на кружки</span></div>
-      <div class="mods-wrap" id="mods-wrap">
-    <div class="mod-card">
-      <div class="mod-icon" style="background:#5A9B87"><span>S</span></div>
-      <div class="mod-info"><div class="mod-name">[Sense]</div><div class="mod-sub">Сенсорная интеграция</div></div>
-      <div class="mod-dots">
-        
-          <div class="mod-dot" style="" onclick="toggleMod('sense',1)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('sense',2)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('sense',3)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('sense',4)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('sense',5)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('sense',6)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('sense',7)"></div>
-      </div>
-    </div>
-    <div class="mod-card">
-      <div class="mod-icon" style="background:#2C4068"><span>M</span></div>
-      <div class="mod-info"><div class="mod-name">[Move]</div><div class="mod-sub">Развитие моторики</div></div>
-      <div class="mod-dots">
-        
-          <div class="mod-dot" style="" onclick="toggleMod('move',1)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('move',2)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('move',3)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('move',4)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('move',5)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('move',6)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('move',7)"></div>
-      </div>
-    </div>
-    <div class="mod-card">
-      <div class="mod-icon" style="background:#7B6BAE"><span>S</span></div>
-      <div class="mod-info"><div class="mod-name">[Speech]</div><div class="mod-sub">Развитие речи</div></div>
-      <div class="mod-dots">
-        
-          <div class="mod-dot" style="" onclick="toggleMod('speech',1)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('speech',2)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('speech',3)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('speech',4)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('speech',5)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('speech',6)"></div>
-          <div class="mod-dot" style="" onclick="toggleMod('speech',7)"></div>
-      </div>
-    </div></div>
+      <div class="sec-head"><span class="sec-title" id="this-week-lbl"></span><span class="sec-sub" id="week-dates"></span></div>
+      <div class="week-card"><div class="week-grid" id="week-grid"></div></div>
+      <div class="sec-head"><span class="sec-title" id="lola-mod-lbl"></span><span class="sec-sub" id="tap-dots-lbl"></span></div>
+      <div class="mods-wrap" id="mods-wrap"></div>
       <div class="notes-wrap">
         <div class="notes-head">
-          <span class="notes-title" id="notes-title">⭐ Победы и заметки</span>
-          <button class="notes-add" onclick="addNoteMode()" id="notes-add-btn">+ добавить</button>
+          <span class="notes-title" id="notes-title"></span>
+          <button class="notes-add" onclick="addNoteMode()" id="notes-add-btn"></button>
         </div>
-        <div id="notes-list"><div style="font-size:12px;color:var(--grey);padding:6px 0;text-align:center">Победы появятся здесь</div></div>
+        <div id="notes-list"></div>
         <div class="note-inp-wrap hidden" id="note-inp-wrap">
           <textarea class="note-inp" id="note-inp" rows="2" placeholder="Сегодня он/она..."></textarea>
           <button class="note-send" onclick="submitNote()">
@@ -442,14 +347,14 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
     <!-- MIND -->
     <div class="screen" id="screen-mind">
       <div class="mind-intro">
-        <div class="mind-intro-title" id="mind-intro-title">Поддержка мамы</div>
-        <div class="mind-intro-p" id="mind-intro-p">Карточки Опоры — для дней когда сил нет. Читай одну, возвращайся сколько нужно. Не требует ничего — только прочитать.</div>
+        <div class="mind-intro-title" id="mind-intro-title"></div>
+        <div class="mind-intro-p" id="mind-intro-p"></div>
       </div>
       <div class="mind-tabs">
-        <button class="mind-tab active" id="tab-opor" onclick="switchMindTab('opor')">Опора</button>
-        <button class="mind-tab" id="tab-sila" onclick="switchMindTab('sila')">Сила</button>
+        <button class="mind-tab active" id="tab-opor" onclick="switchMindTab('opor')"></button>
+        <button class="mind-tab" id="tab-sila" onclick="switchMindTab('sila')"></button>
       </div>
-      <div class="mind-type-desc" id="mind-type-desc">Карточки Опоры — для дней когда сил нет. Читай одну, возвращайся сколько нужно. Не требует ничего — только прочитать.</div>
+      <div class="mind-type-desc" id="mind-type-desc"></div>
       <div id="mind-card-wrap"></div>
       <div class="mind-acts" id="mind-acts"></div>
     </div>
@@ -457,8 +362,8 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
     <!-- LOLA CARDS -->
     <div class="screen" id="screen-lola">
       <div style="padding:14px 16px 0">
-        <div style="font-size:14px;font-weight:500;color:var(--dark)" id="lola-screen-title">LOLA — карточки занятий</div>
-        <div style="font-size:12px;color:var(--grey);margin-top:4px;line-height:1.5" id="lola-screen-sub">Три набора для домашних занятий с ребёнком. Ниже — примеры карточек.</div>
+        <div style="font-size:14px;font-weight:500;color:var(--dark)" id="lola-screen-title"></div>
+        <div style="font-size:12px;color:var(--grey);margin-top:4px;line-height:1.5" id="lola-screen-sub"></div>
       </div>
       <div id="lola-modules-wrap" style="padding:12px 0 16px"></div>
     </div>
@@ -481,8 +386,8 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
       <div class="victs-sec" id="victs-sec"></div>
       <div class="reset-sec">
         <div class="reset-lbl" id="reset-lbl">Управление данными</div>
-        <button class="reset-btn" onclick="confirmReset('week')">🔄 <span id="reset-week-lbl">Новая неделя — сбросить трекер</span></button>
-        <button class="reset-btn danger" onclick="confirmReset('all')">🗑 <span id="reset-all-lbl">Полный сброс всех данных</span></button>
+        <button class="reset-btn" onclick="confirmReset('week')">🔄 <span id="reset-week-lbl"></span></button>
+        <button class="reset-btn danger" onclick="confirmReset('all')">🗑 <span id="reset-all-lbl"></span></button>
       </div>
     </div>
 
@@ -491,23 +396,23 @@ body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
   <nav class="nav">
     <div class="nav-btn active" onclick="switchScreen('cards',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="3" width="9" height="9" rx="2"></rect><rect x="13" y="3" width="9" height="9" rx="2"></rect><rect x="2" y="13" width="9" height="9" rx="2"></rect><rect x="13" y="13" width="9" height="9" rx="2"></rect></svg>
-      <span id="nav0">Карточки</span>
+      <span id="nav0"></span>
     </div>
     <div class="nav-btn" onclick="switchScreen('tracker',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="9 16 11 18 15 14"></polyline></svg>
-      <span id="nav1">Трекер</span>
+      <span id="nav1"></span>
     </div>
     <div class="nav-btn" onclick="switchScreen('mind',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-      <span id="nav2">Опора</span>
+      <span id="nav2"></span>
     </div>
     <div class="nav-btn" onclick="switchScreen('lola',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-      <span id="nav3">LOLA</span>
+      <span id="nav3"></span>
     </div>
     <div class="nav-btn" onclick="switchScreen('progress',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-      <span id="nav4">Итог</span>
+      <span id="nav4"></span>
     </div>
   </nav>
 </div>
@@ -565,7 +470,26 @@ const RU = {
   trackerHelpLbl:'Как пользоваться трекером',
   trackerHelp:'<p><b>Дни недели</b> — отмечай каждый день когда делала занятия или карточки. Нажми на квадрат.</p><p><b>Кружки LOLA</b> — показывают сколько раз в неделю провела занятия по каждому набору. Нажимай кружки слева направо: каждый = один день занятий. Цель — 3–5 в неделю.</p><p><b>Заметки</b> — записывай победы ребёнка. Можно добавить несколько.</p>',
   lolaTitle:'LOLA — карточки занятий', lolaSub:'Три набора для домашних занятий с ребёнком. Ниже — примеры карточек.',
+  lolaExamples:'3 примера',
   lolaCtaFull:'Купить полный набор →', lolaCtaInfo:'Подробнее о наборе',
+  welcomeTitle:'Поддержка мамы. Каждый день.',
+  welcomeDesc:'Это приложение создано для мам детей с особыми потребностями. Оно помогает не потерять себя в заботе о ребёнке — находить точки опоры каждый день.',
+  welcomeForWhomLbl:'Для кого',
+  welcomeForWhom:[
+    {icon:'💛',text:'Мам детей с ЗПР, ДЦП, РАС и другими особенностями развития'},
+    {icon:'📅',text:'Тех кто устал и хочет видеть прогресс — свой и ребёнка'},
+    {icon:'🌿',text:'Тех кто ищет поддержку и простые инструменты для каждого дня'},
+  ],
+  welcomeInsideLbl:'Что внутри',
+  welcomeInside:[
+    {icon:'▦',label:'6 тем',sub:'Карточки планирования для мамы'},
+    {icon:'✓',label:'Трекер',sub:'Занятия и серия недели'},
+    {icon:'☺',label:'Опора + Сила',sub:'25+28 карточек поддержки'},
+    {icon:'📖',label:'LOLA',sub:'Примеры занятий с ребёнком'},
+  ],
+  welcomeTrialLbl:'дней бесплатно — все функции открыты',
+  welcomeCta:'Начать →',
+  welcomeAuthor:'Автор: Рабига Сагындыкова · lola.system',
   onboardTitle:'Добро пожаловать', onboardSub:'Поддержка мамы. Каждый день.',
   trialInfo:'7 дней бесплатно. Все функции открыты.', startBtn:'Начать',
   onboardSteps:[
@@ -733,177 +657,244 @@ const KZ = {
   ...RU,
   week:'Апта', nav:['Карточкалар','Трекер','Тірек','LOLA','Қорытынды'],
   oporaTab:'Тірек', silaTab:'Күш',
-  mindIntroTitle:'Ананы қолдау',
-  oporaDesc:'Тірек карточкалары — күші жетпейтін күндерге. Бір карточканы оқы, қажет болса қайта оралуға болады.',
-  silaDesc:'Күш карточкалары — алға бір қадам жасауға кеуіл керек болғанда.',
+  oporaDesc:'Тірек карточкалары — күшің жетпей тұрған күндерге. Бір карточканы оқы, қайтып оралуыңа болады. Ештеңе жасамай-ақ — тек оқу жеткілікті.',
+  silaDesc:'Күш карточкалары — алға бір қадам жасауға кеуіл керек болғанда. Бір ой немесе бір нақты іс-әрекет.',
   oporaLbl:'Тірек карточкасы', silaLbl:'Күш карточкасы',
-  doneTxt:'✓  Орындадым', doneState:'✓ Орындалды', readBtn:'Оқыдым',
+  doneTxt:'✓  Орындадым', doneState:'✓ Бүгін орындалды', readBtn:'Оқыдым',
   streakLbl:'Апталық серия', thisWeek:'Осы апта', modLbl:'LOLA сабақтары',
-  tapDots:'нүктелерді басыңыз', notesTitle:'⭐ Жетістіктер мен жазбалар',
+  tapDots:'нүктелерді нұқы', notesTitle:'⭐ Жетістіктер мен жазбалар',
   notesAdd:'+ қосу', notePh:'Бүгін ол...', cardOf:'Карточка', cardFrom:'/',
   totalLbl:'карточка орындалды', byWeeks:'Апталар бойынша', victsLbl:'Баланың жетістіктері',
-  victEmpty:'Жетістіктер осында болады', toastDone:'Тамаша! ✓', toastRead:'Оқылды ✓', toastSaved:'Сақталды ✓',
+  victEmpty:'Жетістіктер осында болады',
+  toastDone:'Тамаша! ✓', toastRead:'Оқылды ✓', toastSaved:'Сақталды ✓',
   resetLbl:'Деректерді басқару', resetWeek:'Жаңа апта — трекерді тазарту',
-  resetAll:'Барлық деректерді толық тазарту', resetWeekTitle:'Жаңа апта',
+  resetAll:'Барлық деректерді жою', resetWeekTitle:'Жаңа апта',
   resetWeekBody:'Трекер, серия және модульдер тазартылды. Карточкалар мен жазбалар сақталды.',
-  resetAllTitle:'Толық тазарту', resetAllBody:'Барлық деректер жойылады. Болдырмауға болмайды.',
+  resetAllTitle:'Толық тазарту', resetAllBody:'Барлық деректер жойылады. Бұл әрекетті болдырмауға болмайды.',
   cancel:'Бас тарту', confirm:'Тазарту',
-  startBtn:'Бастау', trialInfo:'7 күн тегін. Барлық функциялар ашық.',
+  startBtn:'Бастау', trialInfo:'7 күн тегін. Барлық мүмкіндіктер ашық.',
   trackerHelpLbl:'Трекерді қалай пайдалану керек',
-  trackerHelp:'<p><b>Апта күндері</b> — сабақ жасаған күн сайын белгіле. Квадратқа бас.</p><p><b>LOLA нүктелері</b> — осы аптада әр модуль бойынша қанша рет сабақ өткізгеніңді көрсетеді. Нүктелерді солдан оңға қарай бас: әрбір нүкте = бір сабақ. Мақсат — аптасына 3–5 рет.</p><p><b>Жазбалар</b> — баланың жетістіктерін жаз. Бірнеше қоса аласың.</p>',
-  lolaTitle:'LOLA — сабақ карточкалары', lolaSub:'Балаңмен үйде сабақ жүргізуге арналған үш жинақ.',
-  lolaCtaFull:'Толық жинақты сатып алу →', lolaCtaInfo:'Жинақ туралы толығырақ',
+  trackerHelp:'<p><b>Апта күндері</b> — занятие немесе карточкамен жұмыс жасаған күн сайын белгіле. Квадратқа нұқы.</p><p><b>LOLA нүктелері</b> — осы аптада әр модуль бойынша қанша рет сабақ өткізгеніңді көрсетеді. Нүктелерді солдан оңға нұқы: әрбір нүкте = бір сабақ. Мақсат — аптасына 3–5 рет.</p><p><b>Жазбалар</b> — баланың жетістіктерін жаз. Бірнеше жазба қоса аласың.</p>',
+  lolaTitle:'LOLA — сабақ карточкалары',
+  lolaSub:'Балаңмен үйде сабақ жүргізуге арналған үш жинақ. Төменде — мысал карточкалар.',
+  lolaExamples:'3 мысал',
+  lolaCtaFull:'Толық жинақты сатып алу →',
+  lolaCtaInfo:'Жинақ туралы толығырақ',
+  mindIntroTitle:'Ананы қолдау',
+  welcomeTitle:'Ананы қолдау. Күн сайын.',
+  welcomeDesc:'Бұл қолданба ерекше қажеттіліктері бар балалардың аналарына арналған. Балаңа күтім жасай отырып өзіңді жоғалтпауға, әр күні тірек табуға көмектеседі.',
+  welcomeForWhomLbl:'Кім үшін',
+  welcomeForWhom:[
+    {icon:'💛',text:'ЗПР, ДЦП, аутизм және дамуының ерекшеліктері бар балалардың аналары үшін'},
+    {icon:'📅',text:'Шаршаған, өзінің де, баласының да өсуін көргісі келетіндер үшін'},
+    {icon:'🌿',text:'Қолдау іздеп, күнделікті өмірде қарапайым тірек қалаушылар үшін'},
+  ],
+  welcomeInsideLbl:'Ішінде не бар',
+  welcomeInside:[
+    {icon:'▦',label:'6 тақырып',sub:'Ана үшін жоспарлау карточкалары'},
+    {icon:'✓',label:'Трекер',sub:'Сабақтар мен апталық серия'},
+    {icon:'☺',label:'Тірек + Күш',sub:'25+28 қолдау карточкасы'},
+    {icon:'📖',label:'LOLA',sub:'Баламен сабақ мысалдары'},
+  ],
+  welcomeTrialLbl:'күн тегін — барлық мүмкіндіктер ашық',
+  welcomeCta:'Бастау →',
+  welcomeAuthor:'Автор: Рабига Сагындықова · lola.system',
+  onboardTitle:'Қош келдіңіз', onboardSub:'Ананы қолдау. Күн сайын.',
+  trialInfo:'7 күн тегін. Барлық мүмкіндіктер ашық.', startBtn:'Бастау',
+  onboardSteps:[
+    {icon:'▦',bg:'#F0EDF8',title:'Жоспарлау карточкалары',desc:'6 тақырып — ойлар, күтім, жақындар, өсу, істер, бюджет. Күнделікті бір карточка тірек береді.'},
+    {icon:'✓',bg:'#EAF5F1',title:'Сабақ трекері',desc:'Баламен жасаған сабақтарыңды белгіле. Жетістіктерді жаз.'},
+    {icon:'☺',bg:'#EAF2FA',title:'Тірек және Күш',desc:'Ана үшін екі жинақ. Тірек — күш жетпегенде. Күш — алға бір қадам керек болғанда.'},
+    {icon:'📖',bg:'#EAF5F1',title:'LOLA карточкалары',desc:'Балаңмен үйде жасауға арналған сабақтар: сенсорика, моторика, сөйлеу.'},
+  ],
   days:['Дс','Сс','Ср','Бс','Жм','Сб','Жк'],
+  modules:[
+    {id:'sense',name:'[Sense]',sub:'Сенсорлық интеграция',color:'#5A9B87',ctaLink:'https://t.me/Baggi_S',
+     cards:[
+       'Доппен қолды баяу уқалау. Әр қолда 30 секунд.',
+       'Дән ойыны: кішкентай ойыншықтарды дәнге жасырып, қолмен тап.',
+       'Жалаң аяқпен түрлі беттерде жүру: кілем, еден, шөп.',
+     ]},
+    {id:'move',name:'[Move]',sub:'Моториканы дамыту',color:'#2C4068',ctaLink:'https://t.me/Baggi_S',
+     cards:[
+       'Помпондарды қысқышпен ыдыстан қорапқа салу. 10 дана.',
+       'Пластилиннен жіңішке таяқша жасау — саусақ бұлшықетін дамытады.',
+       'Ірі моншақтарды жіпке тізу.',
+     ]},
+    {id:'speech',name:'[Speech]',sub:'Сөйлеуді дамыту',color:'#7B6BAE',ctaLink:'https://t.me/Baggi_S',
+     cards:[
+       '«а-а-а» дыбысын үзіліспен айт — баланың жауабын күт.',
+       'Айна алдында ерін қозғалысын асыра көрсет, саусақпен нұсқа.',
+       'Жеңіл қауырсынға «фу-у-у» деп үрле, балаға көрсет.',
+     ]},
+  ],
   cats:[
     {id:'mind',label:'Ойлар',color:'#7B6BAE',bg:'#F0EDF8',cards:[
-      'Осы аптада баламен жанында болған 3 сәтті жаз. Бұл — сенің жұмысың.',
-      'Болашақ туралы бір алаңдаушылықты жаз. Сұра: бұл факт па, үрей ме?',
-      'Диагнозды толық түсінуге міндетті емессің. Бір қадам жасау жеткілікті.',
-      'Балаң өткен айда қалай өсті?',
-      'Өзіңе 5 минут күюге рұқсат бер.',
-      'Осы жолдың басында өзіңе не айтар едің?',
-      'Шаршау — әлсіздік емес. Бұл — сенің салғаның белгісі.',
-      'Бір қорқынышты жаз және жанында — оны жеңіп жасаған бір қадамды.',
-      'Ашулану — шамадан тыс жүктемеге қалыпты реакция.',
-      'Бүгін жауапты білмеуге болады. Жанында болу жеткілікті.',
-      'Осы сәтте анаша өзіңді не үшін сыйлайсың?',
-      'Балаңмен бірге өзгересің. Кім болдың?',
+      'Осы аптада баланың қасында болған 3 сәтті жаз. Бұл — сенің жұмысың.',
+      'Болашақ туралы бір алаңдататын ойды жаз. Сұра өзіңнен: бұл шындық па, жоқ па?',
+      'Диагнозды бәрін толық түсінуге міндетті емессің. Бір қадам жасай білу жеткілікті.',
+      'Балаң өткен айда қандай өзгерді? Тек өзімен ғана салыстыр.',
+      'Өзіңе 5 минут мұңаюға рұқсат бер. Бұл сезіммен бірге болу жеткілікті.',
+      'Осы жолдың басында өзіңе не айтар едің? Сол сөзді бүгін өзіңе айт.',
+      'Шаршау — əлсіздік емес. Бұл — сенің беріп жатқаныңның белгісі.',
+      'Бір қорқынышты жаз. Жанына — сол қорқыныша қарамастан жасаған бір қадамыңды жаз.',
+      'Ашулану — шамадан тыс жүктемеге қалыпты жауап. Сен жаман ана емессің.',
+      'Бүгін жауапты білмеуіңе болады. Жанында болудың өзі де жеткілікті.',
+      'Ана ретінде өзіңді қазір не үшін бағалайсың?',
+      'Балаңмен бірге өзгеріп жатырсың. Бұл айларда кім болдың?',
     ]},
     {id:'self',label:'Күтім',color:'#E8956D',bg:'#FBF0E8',cards:[
-      'Бір стакан су іш. Қазір, келесі жұмысқа дейін.',
-      'Үш баяу дем ал, аяқтарыңды еденге қой. Сен осындасың.',
-      'Телефонсыз 15 минут тап. Жату ғана. Бұл еріншектік емес.',
-      'Бір нәрсе отырып же. Асыға емес.',
-      'Ауаға 10 минутқа шық. Өзің үшін.',
-      'Денең қазір не сұрайды?',
-      'Мойын мен иықты 2 минут массаж жаса.',
-      'Салқын сумен жуын. Бұл — өзіңе оралу.',
-      'Ертең тек өзің үшін бір сәт жоспарла.',
-      'Бүгін 30 минут ерте ұйықта.',
-      'Бүгін біреуге «жоқ» деуге өзіңе рұқсат бер.',
-      'Соңғы рет қашан күлдің?',
+      'Бір стакан су іш. Қазір, келесі жұмыстан бұрын.',
+      'Үш баяу дем ал, аяқтарыңды еденге тіре. Сен осындасың.',
+      'Телефонсыз 15 минут тап. Жай жату. Бұл жалқаулық емес — бұл ем.',
+      'Бір нәрсені отырып же. Асыға емес, байсалды.',
+      'Ауаға 10 минутқа шық. Қадамдар үшін емес — өзің үшін.',
+      'Денең қазір не сұрап тұр? Жылулық па, тыныштық па, қозғалыс па?',
+      'Мойын мен иықты 2 минут жайлап уқала. Сен көп нәрсе көтересің.',
+      'Бетіңді салқын сумен жу. Бұл — өзіңе оралудың жолы.',
+      'Ертеңге тек өзің үшін бір сәт жоспарла — бала үшін емес.',
+      'Бүгін 30 минут ерте ұйықтауға тырыс.',
+      'Бүгін біреуге «жоқ» деуге өзіңе рұқсат бер. Сенің күшің — міндет емес.',
+      'Ең соңғы рет қашан күлдің? Күлкілі бірдеңе тап — бұл да күтім.',
     ]},
     {id:'family',label:'Жақындар',color:'#4A7FA5',bg:'#EAF2FA',cards:[
-      'Балаңмен 15 минут жанында бол — сабақ бермей.',
-      'Осы аптада балаң таңқалдырған бір сәтті жаз.',
-      'Серіктесіңе қазір не керек екенін нақты айт.',
-      'Бүгін біреуден нақты кішкентай көмек сұра.',
-      'Балаңа өзің туралы бір нәрсе айт.',
-      'Ұқсас жағдайдағы ананы тап — жазу, қолдау.',
-      '«Мен осындамын. Ешқайда кетпеймін.» — балаңа айт.',
-      'Телефонсыз отбасылық кеш. 20 минут бірге.',
-      'Серіктесіңе ризашылықты жаз.',
-      'Жақындарыңның біріне қоңырау шал.',
-      'Басқаларға күтімге қатысуға рұқсат бер.',
-      'Бүгін баланың суретін тарт. Өзің үшін.',
+      'Балаңмен 15 минут жанында бол — сабақ бермей, алаңдатпай. Тек бірге болу.',
+      'Осы аптада балаң таңқалдырған бір сәтті жаз. Оны сақтап қой.',
+      'Серіктесіңе қазір не керек екенін нақты айт. Меңземе — тікелей айт.',
+      'Бүгін біреуден бір нақты, кішкентай көмек сұра.',
+      'Балаңа өзің туралы бір нәрсе айт. Ол да сені білгісі келеді.',
+      'Ұқсас жағдайдағы ананы тап — хабарлас, қолда, қолдау ал.',
+      '«Мен осындамын. Мен ешқайда кетпеймін» — балаңа айт. Ол сезеді.',
+      'Телефонсыз отбасылық кеш. 20 минут бірге — бұл да реабилитация.',
+      'Серіктесіңе не үшін ризасың? Қазір жаз.',
+      'Жақын адамыңа қоңырау шал — іс үшін емес, жай дауысы үшін.',
+      'Күтімге басқалардың қатысуына рұқсат бер. Бәрін өзің тартпауың керек.',
+      'Баланың суретін тарт бүгін. Есеп үшін емес — өзің үшін.',
     ]},
     {id:'growth',label:'Өсу',color:'#5A9B87',bg:'#EAF5F1',cards:[
-      'Балаң туралы осы аптада жауабын тапқың келетін бір сұрақты жаз.',
-      'Өткен айда балаң туралы не білдің?',
-      'Саған пайдалы тақырыпқа 10 минут бөл.',
-      'Соңғы жарты жылда үйренген бір нәрсені жаз.',
-      'Өзің үшін қандай дағды дамытқың келеді?',
-      'Жобаң үшін бір идеяны жаз.',
-      'Тегін ресурс тап.',
-      'Бір жыл бұрын не жасадың? Қалай өстің?',
-      'Зерттегің келетін материалдар тізімін жаса.',
-      'Маманнан ұсыныс сұра.',
-      '«Жол үстінде үйренемін. Бұл қалыпты.»',
-      'Өзің туралы бір арманды жаз.',
+      'Осы аптада балаң туралы жауабын тапқың келетін бір сұрақты жаз.',
+      'Өткен айда балаң туралы не білдің? Жаз.',
+      'Өзіңе пайдалы тақырыпқа 10 минут бөл: мақала, видео, подкаст.',
+      'Соңғы жарты жылда не үйрендің — ана ретінде де, адам ретінде де?',
+      'Реабилитация үшін емес, өзің үшін дамытқың келетін бір дағды бар ма?',
+      'Өз жобаң немесе ісің үшін бір идеяны жаз. Уақыт болмаса да — жаз.',
+      'Тегін ресурс тап: курс, мақала, мамандар тобы.',
+      'Бір жыл бұрын не жасадың? Ол кезден бері қалай өстің?',
+      'Зерттегің келетін материалдар тізімін жаса. Алғашқы қадам — тізімді табу.',
+      'Маманнан ұсыныс сұра: не оқу керек, үйде не байқап көруге болады.',
+      '«Жол үстінде үйренемін. Бұл қалыпты.» — ешкімде нұсқаулық жоқ.',
+      'Бір арманды жаз — тек бала туралы емес, өзің туралы да.',
     ]},
     {id:'plan',label:'Істер',color:'#1B2A4A',bg:'#E8EDF5',cards:[
-      'Осы аптадағы мамандарды жаз. Әрқайсысына бір сұрақ.',
-      'Маманның үй тапсырмасы — шынайы белгіле.',
-      'Ілулі тұрған бір мәселе — алғашқы қадам жаса.',
-      'Жарамдылық мерзімі бітетін құжаттар бар ма?',
-      'Аптаға 5-тен аспайтын іс тізімі.',
-      'Бір ісіңді тапсыр. Кім көмектесе алады?',
-      'Антихаос-рутина: бәрі бұзылғанда 3 әрекет.',
-      'LOLA карточкасын ал және қазір сабақ жүргіз. 10 минут.',
-      'Маманға сұрақты жаздың ба? Қазір жаз.',
-      'Баланың құжаттары — 15 минут тәртіпке келтір.',
-      'Жолда баламен жасауға болатын істер тізімі.',
-      'Бір сағатты тек өз істеріңе арна.',
+      'Осы аптадағы мамандарды жаз. Әрқайсысына бір сұрақ дайында.',
+      'Маманның үй тапсырмасы — адал белгіле, орындадың ба?',
+      'Ілулі тұрған бір әкімшілік мәселені жаз — алғашқы қадамын жаса.',
+      'Мерзімі бітуге жақын құжаттар немесе анықтамалар бар ма?',
+      'Аптаға 5-тен аспайтын іс тізімін жаз. Қалғаны — уақыт болса.',
+      'Бір ісіңді басқаға тапсыр. Кім көмектесе алады? Бүгін айт.',
+      '«Антихаос» рутинасы: бәрі шатасқанда жасайтын 3 іс-әрекет.',
+      'LOLA карточкасын ал да қазір 10 минут сабақ жүргіз.',
+      'Маманға қойғың келетін сұрақты жазып қойдың ба? Қазір жаз.',
+      'Баланың құжаттар қалтасын 15 минутта реттеп ал.',
+      'Жолда немесе күнделікті рутина кезінде баламен жасауға болатын істер тізімі.',
+      'Бір сағатты тек өз істеріңе бөл. Бұл эгоизм емес — өзіңді қалпына келтіру.',
     ]},
     {id:'budget',label:'Бюджет',color:'#C4892A',bg:'#FBF3E8',cards:[
-      'Осы аптадағы реабилитация шығындарын жаз. Қанша болды?',
-      'Осы аптаны өткен аптамен салыстыр. Не өзгерді?',
-      'Осы аптадағы міндетті төлем — алдын ала төле.',
+      'Осы аптадағы реабилитация шығындарыңды жаз. Қанша болды? Бұл ақпарат, айып емес.',
+      'Осы аптаны өткен аптамен салыстыр. Не өзгерді? Қайда азайтуға болады?',
+      'Осы аптадағы міндетті төлемді алдын ала төле, кейінге қалдырма.',
       'Келесі айдың реабилитациясына бюджет жоспарладың ба?',
-      'Осы аптадағы ең үлкен шығын. Қажет болды ма?',
-      'Қаржылық жастыққа бір кіші қадам: бүгін кез келген соманы бөліп қой.',
-      'Ай сайын қайталанатын 3 шығын. Оңтайландыруға болады ма?',
-      'Осы аптада өзіңе қанша жұмсадың?',
-      'Алаңдататын шығын бар ма? Жаз және бір шешім ойла.',
-      'Ұмытылған берешек немесе төлем бар ма?',
-      'Осы айға қаржылық мақсат. Нақты: қанша жинау.',
-      'Осы айдың реабилитациясы қанша тұрды? Санды жаз.',
+      'Осы аптадағы ең үлкен шығын. Ол қажет болды ма?',
+      'Қаржылық резервке бір кіші қадам: бүгін кез келген соманы бөліп қой.',
+      'Ай сайын қайталанатын 3 шығынды жаз. Оңтайландыруға бола ма?',
+      'Осы аптада тек өзіңе қанша жұмсадың? Бұл да маңызды.',
+      'Алаңдататын шығын бар ма? Жаз — бір шешімін ойла.',
+      'Ұмытылып кеткен берешек немесе төлем жоқ па?',
+      'Осы айға қаржылық мақсат қой. Нақты: қанша жинау немесе қанша азайту.',
+      'Осы айдың реабилитациясы жалпы қанша тұрды? Санды жаз — жоспарлау үшін керек.',
     ]},
   ],
   oporCards:[
-    'Бүгін ешнәрсеге үлгермеуге болады. Әлем құламайды.',
-    'Сен жеткілікті жасадың. Жоқ сияқты болса да.',
-    'Күн сайын ресурста болуға міндетті емессің.',
-    'Күші жетпесе, жоспарды бас тартуға болады.',
-    'Жылау — сәтсіздік емес. Бұл қысымды босату тәсілі.',
-    '«Шарштадым» дегенің дауыстап айтылуға хақы бар.',
-    'Ішіңде ауыр болса, күлмеуге міндетті емессің.',
-    'Көмек сұрау — күтім, сатқындық емес.',
-    'Мінсіз ана жоқ. Болған да жоқ.',
+    'Бүгін ешнәрсеге үлгермеуіңе болады. Дүние күйремейді.',
+    'Сен жеткілікті жасадың. Жеткіліксіз сияқты болса да.',
+    'Күн сайын барынша берілуге міндетті емессің.',
+    'Күші жетпесе, жоспарды жоюға болады. Бұл əлсіздік емес.',
+    'Жылау — сəтсіздік емес. Бұл ішкі қысымды босатудың жолы.',
+    '«Шаршадым» деген сөзің дауыстап айтылуға лайық.',
+    'Ішіңде ауыр болса, жымиюға міндетті емессің.',
+    'Көмек сұрау — адам болудың белгісі, опасыздық емес.',
+    'Мінсіз ана жоқ. Ешқашан болған да жоқ.',
     'Жаман күн сені жаман ана етпейді.',
-    'Аяқтарыңды еденге қой. Сен осындасың.',
-    'Бір баяу дем ал. Бұл жеткілікті.',
-    'Айнала қара. Үш нәрсені ата.',
-    'Денең қашан тоқтау керектігін біледі.',
-    'Жатып тыныс алсаң да — бақылауды жалғастырасың.',
-    'Қазір бәрін шешудің қажеті жоқ.',
-    'Тыныштық та қолдаудың бір түрі.',
-    'Сенің жағдайың мінсіз әдістемелерден күштірек.',
-    'Балаға мінсіз ана емес, тірі ана керек.',
-    'Жанында болу кейде дұрыс жасаудан маңыздырақ.',
-    'Бүгін даму болмаса да, байланыс болды.',
-    'Өз-өзіңді күту — балаға салым.',
+    'Аяқтарыңды еденге тіре. Сен осындасың.',
+    'Бір баяу дем ал. Бір дем — жеткілікті.',
+    'Айналаңа қара. Үш нәрсені атап шық.',
+    'Денең қашан тоқтау керектігін біледі. Оны тыңда.',
+    'Жай жатып тыныс алсаң да — балаңды сүюді жалғастырып жатырсың.',
+    'Қазір бәрін шешудің қажеті жоқ. Осында болудың өзі де жеткілікті.',
+    'Тыныштық та — қолдаудың бір түрі.',
+    'Сенің күйің мінсіз əдістемелерден гөрі маңыздырақ.',
+    'Балаға мінсіз ана емес, тірі, шынайы ана керек.',
+    'Жанында болу кейде «дұрыс жасаудан» да маңыздырақ.',
+    'Бүгін даму болмаса да, жылулық болды. Байланыс болды.',
+    'Өзіңді күту — балаға жасаған ең маңызды инвестиция.',
     'Бәрін өзің тартуға міндетті емессің.',
-    'Бүгінгі күнді жай өткізуге болады.',
-    'Лимондай сыгылып та жанында болу — үлкен ерлік.',
+    'Бүгінгі күнді жай өткізудің өзі де жеткілікті.',
+    'Сарқылып тұрып та жанында болу — бұл ерлік.',
   ],
   silaCards:[
-    'Мүмкін емес болып көрінген нәрседен өттің.',
-    'Артыңа қара — қаншалықты жол жүргеніңді көру үшін.',
-    'Еңбегің бекер емес. Нәтиже көрінбесе де — ол бар.',
-    'Тұрып жалғастырған күн сайын — жеңіс.',
-    'Алға жылжып келесің. Кішкентай қадамдар да алға.',
-    'Керек болса жыла. Содан кейін тұр.',
-    'Сен бас тартпайсың. Сүйгендіктен.',
-    'Балаң саған мұқтаж — мінсіз анаға емес, дәл саған.',
+    'Мүмкін емес болып көрінген нəрседен сен өттің. Жалғастырып жатырсың.',
+    'Артыңа бір рет қара — сынай емес, қанша жол жүргеніңді көру үшін.',
+    'Еңбегің текке кетпейді. Бүгін нəтиже байқалмаса да — ол бар.',
+    'Тұрып жалғастырған күн сайын — бұл жеңіс. Шынайы жеңіс.',
+    'Алға бет алып келесің. Кішкентай қадамдар да алға бағытталған.',
+    'Керек болса жыла. Одан кейін тұр — сен мұны жасай аласың.',
+    'Сен бас тартпайсың. Міндетті болғандықтан емес — сүйетіндіктен.',
+    'Балаң саған мұқтаж — мінсіз анаға емес, дəл саған.',
     'Ол сөйлемесе де — сенің сүйіспеншілігіңді сезеді.',
-    'Сенің құшағың — оның ең қауіпсіз орны.',
-    'Кіші прогресс — бірге жеңген жеңіс.',
-    'Оған көрсетесің: қиындықтар соңы емес.',
-    'Балаң сенге өзіңнен гөрі көбірек сенеді.',
-    'Оның кіші прогресі — сенің үлкен жұмысың.',
-    'Сен — оның дауысы. Ол үшін күрес.',
-    'Үмітсіздік — шындық емес. Бұл шаршау сөйлейді.',
-    'Ұзақ уақыт кейінге қалдырған бір қоңырауды жаса. Бүгін.',
-    'Үміт сенің ішіңде өмір сүреді.',
-    'Әлем сенің қарсыңда емес. Жол тек ауыр.',
-    'Сен — жауынгер. Жауынгер.',
-    'Түсінетін бір адамды тап. Бүгін жаз.',
-    'Бүгін нақты бір нәрсе үшін өзіңді мақта.',
-    'Сенің төзімділігің — күн сайын жасайтын таңдау.',
-    'Сен қолдауға лайықсың. Сұра — бұл батылдық.',
-    'Сен әдемі күресуге міндетті емессің.',
-    'Сенің сүйіспеншілігің — баланың ең қуатты нәрсесі.',
-    'Балаңмен бірге өсесің.',
-    'Шаршауың — сүйіспеншіліктің ізі.',
+    'Сенің құшағың — оның ең қауіпсіз жері.',
+    'Кішкентай прогресс — бірге жеңген жеңіс.',
+    'Оған көрсетіп жатырсың: қиындықтар соңы емес. Ол сені бақылап үйренеді.',
+    'Балаң өзіңнен де артық саған сенеді.',
+    'Оның кішкентай прогресі — сенің үлкен жұмысың. Бағасыздаттырма.',
+    'Сен — оның дауысы. Ол үшін күрес, ол үшін талап ет.',
+    'Үмітсіздік — шындық емес. Бұл шаршау сөйлеп тұр. Олар бір нəрсе емес.',
+    'Ұзақ уақыт кейінге қалдырып жүрген бір қоңырауды жаса. Бір ғана. Бүгін.',
+    'Үміт сенің ішіңде — тіпті оны сезбей тұрған күндерде де.',
+    'Əлем сенің жауың емес. Жол қиын ғана. Бұл — екі бөлек нəрсе.',
+    'Сен — жауынгер. Құрбан емес, ем іздеуші емес — жауынгер.',
+    'Түсінетін бір адам тап. Бүгін хабарлас.',
+    'Нақты бір нəрсе үшін өзіңді мақта. Дауыстап. Өзіңе.',
+    'Сенің төзімділігің — туа пайда болмаған нəрсе. Бұл — күн сайынғы таңдауың.',
+    'Сен қолдауға лайықсың. Сұра — бұл батылдық, əлсіздік емес.',
+    'Сен əсем күресуге міндетті емессің. Күресудің өзі де жеткілікті.',
+    'Сенің сүйіспеншілігің — балаңда бар ең күшті нəрсе.',
+    'Балаңмен бірге өсіп жатырсың. Əр қиындық сені күшейтеді.',
+    'Шаршауың — күн сайын береп жатқан сүйіспеншіліктің ізі.',
   ],
 };
 
-// ── ENGLISH ──────────────────────────────────────────────────────
 const EN = {
   ...RU,
   week:'Week', nav:['Cards','Tracker','Support','LOLA','Progress'],
   oporaTab:'Rest', silaTab:'Strength',
+  welcomeTitle:'Support for you. Every day.',
+  welcomeDesc:'This app is built for mothers of children with special needs. It helps you stay grounded while caring for your child — finding your footing every single day.',
+  welcomeForWhomLbl:'Who it is for',
+  welcomeForWhom:[
+    {icon:'💛',text:'Mums of children with developmental delays, cerebral palsy, autism and other conditions'},
+    {icon:'📅',text:'Those who are exhausted and want to see progress — their own and their child\'s'},
+    {icon:'🌿',text:'Those looking for support and simple tools for every day'},
+  ],
+  welcomeInsideLbl:'What\'s inside',
+  welcomeInside:[
+    {icon:'▦',label:'6 topics',sub:'Planning cards for mum'},
+    {icon:'✓',label:'Tracker',sub:'Sessions and weekly streak'},
+    {icon:'☺',label:'Rest + Strength',sub:'25+28 support cards'},
+    {icon:'📖',label:'LOLA',sub:'Activity examples for your child'},
+  ],
+  welcomeTrialLbl:'days free — all features unlocked',
+  welcomeCta:'Start →',
+  welcomeAuthor:'Author: Rabiga Sagyndykova · lola.system',
   mindIntroTitle:'Support for you',
   oporaDesc:'Rest Cards — for days when you have no energy. Read one card, come back as often as needed.',
   silaDesc:'Strength Cards — when you need a push forward. One thought or action to get you moving.',
@@ -924,6 +915,17 @@ const EN = {
   trackerHelp:'<p><b>Week days</b> — tap a square each day you do any session or card.</p><p><b>LOLA dots</b> — show how many days this week you did each module. Tap left to right: each dot = one session. Aim for 3–5 per module.</p><p><b>Notes</b> — record your child\'s victories. Add as many as you like.</p>',
   lolaTitle:'LOLA — activity cards', lolaSub:'Three sets of cards for home sessions with your child.',
   lolaCtaFull:'Buy full set →', lolaCtaInfo:'Learn more about this set',
+  lolaExamples:'3 examples',
+  lolaCtaFull:'Buy full set →',
+  lolaCtaInfo:'Learn more about this set',
+  modules:[
+    {id:'sense',name:'[Sense]',sub:'Sensory integration',color:'#5A9B87',ctaLink:'https://t.me/Baggi_S',
+     cards:['Roll a tactile ball slowly along your child\'s arm. 30 seconds each arm.','Rice bin play: hide small toys in rice, find them using hands only.','Walk barefoot on different surfaces: carpet, tile, grass.']},
+    {id:'move',name:'[Move]',sub:'Motor development',color:'#2C4068',ctaLink:'https://t.me/Baggi_S',
+     cards:['Transfer pompoms with tongs from a bowl to a box. 10 pieces.','Roll sausage shapes from clay — builds pincer grip.','Thread large beads onto a lace with a stiff tip.']},
+    {id:'speech',name:'[Speech]',sub:'Speech development',color:'#7B6BAE',ctaLink:'https://t.me/Baggi_S',
+     cards:['Sing the sound \"ah-ah-ah\" with pauses — wait for your child\'s response.','Use a mirror: exaggerate lip movements, point to them.','Blow on a feather saying \"phoo\" — show your child how.']},
+  ],
   days:['Mo','Tu','We','Th','Fr','Sa','Su'],
   cats:[
     {id:'mind',label:'Mind',color:'#7B6BAE',bg:'#F0EDF8',cards:[
@@ -1117,7 +1119,10 @@ function setLang(lang){
   LANG=lang; sv('lang',lang);
   document.getElementById('lang-overlay').classList.add('hidden');
   document.getElementById('lang-sw').textContent=({ru:'RU',kz:'ҚАЗ',en:'EN'})[lang];
-  applyStatic(); renderAll();
+  applyStatic();
+  // Show welcome screen on first visit
+  const seen=localStorage.getItem('lola_seenWelcome');
+  if(!seen){ showWelcome(); } else { renderAll(); updateTrialBadge(); }
 }
 function showLangPicker(){
   document.getElementById('lang-overlay').classList.remove('hidden');
@@ -1153,6 +1158,43 @@ function applyStatic(){
   document.getElementById('lola-screen-sub').textContent=tr.lolaSub||'';
   // Mind type desc
   renderMindTypeDesc();
+}
+
+
+// ═══════════════════════════════
+// WELCOME SCREEN
+// ═══════════════════════════════
+function showWelcome(){
+  const tr=t();
+  document.getElementById('welcome-title').textContent=tr.welcomeTitle||'';
+  document.getElementById('welcome-desc').textContent=tr.welcomeDesc||'';
+  document.getElementById('welcome-for-whom-lbl').textContent=tr.welcomeForWhomLbl||'';
+  document.getElementById('welcome-inside-lbl').textContent=tr.welcomeInsideLbl||'';
+  document.getElementById('welcome-trial-lbl').textContent=tr.welcomeTrialLbl||'';
+  document.getElementById('welcome-cta').textContent=tr.welcomeCta||'Start →';
+  document.getElementById('welcome-author').textContent=tr.welcomeAuthor||'';
+  const fwEl=document.getElementById('welcome-for-whom');
+  if(fwEl) fwEl.innerHTML=(tr.welcomeForWhom||[]).map(i=>
+    `<div style="display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px">
+      <span style="font-size:18px;flex-shrink:0">${i.icon}</span>
+      <span style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.45">${i.text}</span>
+    </div>`).join('');
+  const insEl=document.getElementById('welcome-inside');
+  if(insEl) insEl.innerHTML=(tr.welcomeInside||[]).map(i=>
+    `<div style="background:rgba(255,255,255,.07);border-radius:10px;padding:12px">
+      <div style="font-size:20px;margin-bottom:4px">${i.icon}</div>
+      <div style="font-size:13px;font-weight:500;color:#fff">${i.label}</div>
+      <div style="font-size:11px;color:var(--peachl);margin-top:2px">${i.sub}</div>
+    </div>`).join('');
+  document.getElementById('welcome-overlay').classList.remove('hidden');
+}
+
+function startFromWelcome(){
+  document.getElementById('welcome-overlay').classList.add('hidden');
+  sv('seenWelcome', true);
+  if(!ST.installDate){ ST.installDate=Date.now(); sv('installDate',ST.installDate); }
+  renderAll();
+  updateTrialBadge();
 }
 
 // ═══════════════════════════════
@@ -1361,16 +1403,16 @@ function renderLola(){
       <div class="lola-module">
         <div class="lola-mod-header">
           <div class="lola-mod-icon" style="background:${m.color}">${m.name[1]}</div>
-          <div><div class="lola-mod-name">${m.name} ${m.sub}</div><div class="lola-mod-sub">${tr.cardOf} — 3 примера</div></div>
+          <div><div class="lola-mod-name">${m.name} ${m.sub}</div><div class="lola-mod-sub">${tr.cardOf} — ${tr.lolaExamples||'3 примера'}</div></div>
         </div>
         <div class="lola-cards-row">
           ${m.cards.map(c=>`<div class="lola-mini-card" style="background:${m.color}18;border:1px solid ${m.color}30">${c}</div>`).join('')}
         </div>
         <button class="lola-cta" style="background:${m.color};color:#fff" onclick="window.open('${m.ctaLink}','_blank')">
-          ${tr.lolaCtaFull||'Купить полный набор'} →
+          ${tr.lolaCtaFull||'Buy full set →'}
         </button>
         <button class="lola-cta" style="background:transparent;color:${m.color};border:1.5px solid ${m.color}" onclick="window.open('${m.ctaLink}','_blank')" style="margin-top:4px">
-          ${tr.lolaCtaInfo||'Подробнее о наборе'}
+          ${tr.lolaCtaInfo||'Learn more'}
         </button>
       </div>
     </div>`).join('');
@@ -1546,10 +1588,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('lang-overlay').classList.add('hidden');
     document.getElementById('lang-sw').textContent=({ru:'RU',kz:'ҚАЗ',en:'EN'})[savedLang];
 
-    const seenOnboard=localStorage.getItem('lola_seenOnboard');
-    if(!seenOnboard){
+    const seenWelcome=localStorage.getItem('lola_seenWelcome');
+    if(!seenWelcome){
       applyStatic();
-      showOnboarding();
+      showWelcome();
     } else {
       if(!ST.installDate){ ST.installDate=Date.now(); sv('installDate',ST.installDate); }
       applyStatic();
@@ -1563,4 +1605,3 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 </body></html>
-  
