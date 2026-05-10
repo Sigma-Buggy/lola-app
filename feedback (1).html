@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOLA System — Обратная связь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1B2A4A;
+  --navy2: #243660;
+  --peach: #E8956D;
+  --peach2: #F5C9B0;
+  --cream: #FDF8F2;
+  --warm: #F5ECD7;
+  --dark: #1A1A1A;
+  --grey: #7A7A7A;
+  --light: #EDE8E0;
+  --green: #5A9B87;
+  --r: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.hero {
+  background: var(--navy);
+  padding: 48px 24px 52px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(232,149,109,.12);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(90,155,135,.1);
+}
+.hero-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--peach2);
+  margin-bottom: 14px;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 7vw, 44px);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.hero-title em { color: var(--peach); font-style: italic; }
+.hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,.55);
+  line-height: 1.65;
+  max-width: 480px;
+  margin: 0 auto 20px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(232,149,109,.2);
+  border: 1px solid rgba(232,149,109,.4);
+  border-radius: 50px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: var(--peach2);
+}
+
+/* ── FORM WRAPPER ── */
+.form-wrap {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+/* ── SECTION LABEL ── */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--peach);
+  margin-bottom: 16px;
+  margin-top: 32px;
+}
+.section-tag::before {
+  content: '';
+  width: 20px;
+  height: 1.5px;
+  background: var(--peach);
+  display: inline-block;
+}
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: #fff;
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid var(--light);
+  transition: border-color .2s, box-shadow .2s;
+}
+.q-card:focus-within {
+  border-color: var(--peach);
+  box-shadow: 0 0 0 3px rgba(232,149,109,.1);
+}
+.q-num {
+  font-size: 11px;
+  color: var(--peach);
+  font-weight: 500;
+  margin-bottom: 6px;
+  letter-spacing: .5px;
+}
+.q-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--dark);
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+.q-hint {
+  font-size: 12px;
+  color: var(--grey);
+  margin-top: -8px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* ── RADIO / CHECKBOX ── */
+.options { display: flex; flex-direction: column; gap: 8px; }
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--light);
+  cursor: pointer;
+  transition: all .15s;
+  font-size: 14px;
+  color: var(--dark);
+  user-select: none;
+}
+.opt:hover { border-color: var(--peach); background: rgba(232,149,109,.04); }
+.opt input[type="radio"],
+.opt input[type="checkbox"] { display: none; }
+.opt-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--light);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.opt-sq {
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--light);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.opt input:checked ~ .opt-dot,
+.opt input:checked ~ .opt-sq {
+  background: var(--peach);
+  border-color: var(--peach);
+}
+.opt input:checked ~ .opt-dot::after {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #fff;
+}
+.opt input:checked ~ .opt-sq::after {
+  content: '✓';
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+}
+.opt input:checked ~ span { font-weight: 500; color: var(--navy); }
+label.opt input:checked + .opt-dot { background: var(--peach); border-color: var(--peach); }
+
+/* ── PRICE GRID ── */
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+@media(min-width:480px){ .price-grid { grid-template-columns: repeat(3, 1fr); } }
+.price-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-radius: 10px;
+  border: 1.5px solid var(--light);
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+  user-select: none;
+}
+.price-opt:hover { border-color: var(--peach); background: rgba(232,149,109,.04); }
+.price-opt input { display: none; }
+.price-opt.selected { border-color: var(--peach); background: rgba(232,149,109,.08); }
+.price-amount { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--navy); line-height: 1.1; }
+.price-label { font-size: 11px; color: var(--grey); margin-top: 3px; }
+
+/* ── STARS ── */
+.stars { display: flex; gap: 6px; }
+.star {
+  font-size: 28px;
+  cursor: pointer;
+  filter: grayscale(1) opacity(.3);
+  transition: filter .15s, transform .1s;
+  user-select: none;
+}
+.star:hover, .star.lit { filter: none; transform: scale(1.1); }
+
+/* ── TEXTAREA ── */
+.q-textarea {
+  width: 100%;
+  border: 1.5px solid var(--light);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--dark);
+  resize: vertical;
+  min-height: 90px;
+  outline: none;
+  transition: border-color .2s;
+  background: var(--cream);
+}
+.q-textarea:focus { border-color: var(--peach); }
+
+/* ── NPS ── */
+.nps-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.nps-btn {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  border: 1.5px solid var(--light);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  color: var(--dark);
+}
+.nps-btn:hover { border-color: var(--peach); background: rgba(232,149,109,.1); }
+.nps-btn.sel { background: var(--peach); border-color: var(--peach); color: #fff; }
+.nps-labels { display: flex; justify-content: space-between; margin-top: 6px; }
+.nps-lbl { font-size: 11px; color: var(--grey); }
+
+/* ── SUBMIT ── */
+.submit-wrap { margin-top: 32px; text-align: center; }
+.submit-btn {
+  display: inline-block;
+  padding: 16px 48px;
+  border-radius: 50px;
+  border: none;
+  background: var(--navy);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+  letter-spacing: .3px;
+}
+.submit-btn:hover { background: var(--peach); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(232,149,109,.3); }
+.submit-note { font-size: 12px; color: var(--grey); margin-top: 12px; line-height: 1.5; }
+
+/* ── THANK YOU ── */
+.thankyou {
+  display: none;
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.thankyou.show { display: block; }
+.ty-icon { font-size: 52px; margin-bottom: 16px; }
+.ty-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--navy); margin-bottom: 10px; }
+.ty-text { font-size: 14px; color: var(--grey); line-height: 1.65; }
+
+/* ── PROGRESS ── */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--peach);
+  transition: width .3s;
+  z-index: 100;
+}
+
+/* ── FOOTER ── */
+.foot {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--grey);
+  border-top: 1px solid var(--light);
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress" style="width:0%"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-brand">LOLA System · Обратная связь</div>
+  <h1 class="hero-title">Помогите сделать<br><em>LOLA лучше</em></h1>
+  <p class="hero-sub">15 вопросов, большинство — выбор варианта. Занимает 3–5 минут. Ваш ответ реально влияет на то, что появится в приложении.</p>
+  <div class="hero-badge">💛 Анонимно · Без регистрации</div>
+</div>
+
+<!-- FORM -->
+<div class="form-wrap" id="form-wrap">
+  <form id="feedback-form">
+
+    <!-- ── О ВАС ── -->
+    <div class="section-tag">О вас</div>
+
+    <div class="q-card">
+      <div class="q-num">01</div>
+      <div class="q-text">Как вы узнали о LOLA System?</div>
+      <div class="options" id="q1">
+        <label class="opt"><input type="radio" name="q1" value="telegram"><div class="opt-dot"></div><span>Telegram-канал или группа</span></label>
+        <label class="opt"><input type="radio" name="q1" value="instagram"><div class="opt-dot"></div><span>Instagram / TikTok</span></label>
+        <label class="opt"><input type="radio" name="q1" value="friend"><div class="opt-dot"></div><span>Порекомендовали знакомые</span></label>
+        <label class="opt"><input type="radio" name="q1" value="search"><div class="opt-dot"></div><span>Сам(а) нашёл(а) в поиске</span></label>
+        <label class="opt"><input type="radio" name="q1" value="other"><div class="opt-dot"></div><span>Другое</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">02</div>
+      <div class="q-text">Как давно у вас ребёнок с особыми потребностями?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q2" value="lt1"><div class="opt-dot"></div><span>Меньше года</span></label>
+        <label class="opt"><input type="radio" name="q2" value="1-3"><div class="opt-dot"></div><span>1–3 года</span></label>
+        <label class="opt"><input type="radio" name="q2" value="3-7"><div class="opt-dot"></div><span>3–7 лет</span></label>
+        <label class="opt"><input type="radio" name="q2" value="7+"><div class="opt-dot"></div><span>Больше 7 лет</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">03</div>
+      <div class="q-text">Вы пользовались другими приложениями или инструментами для поддержки/планирования?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q3" value="no"><div class="opt-dot"></div><span>Нет, LOLA — первое</span></label>
+        <label class="opt"><input type="radio" name="q3" value="notes"><div class="opt-dot"></div><span>Да, заметки/планировщики (Notion, календарь)</span></label>
+        <label class="opt"><input type="radio" name="q3" value="groups"><div class="opt-dot"></div><span>Да, группы и чаты в Telegram/WhatsApp</span></label>
+        <label class="opt"><input type="radio" name="q3" value="apps"><div class="opt-dot"></div><span>Да, специальные приложения для детей</span></label>
+      </div>
+    </div>
+
+    <!-- ── КОНТЕНТ ── -->
+    <div class="section-tag">Контент</div>
+
+    <div class="q-card">
+      <div class="q-num">04</div>
+      <div class="q-text">Какой раздел вы открываете чаще всего?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q4" value="cards"><div class="opt-dot"></div><span>▦ Карточки планирования</span></label>
+        <label class="opt"><input type="radio" name="q4" value="tracker"><div class="opt-dot"></div><span>✓ Трекер</span></label>
+        <label class="opt"><input type="radio" name="q4" value="opor"><div class="opt-dot"></div><span>☺ Опора / Сила</span></label>
+        <label class="opt"><input type="radio" name="q4" value="lola"><div class="opt-dot"></div><span>📖 LOLA карточки занятий</span></label>
+        <label class="opt"><input type="radio" name="q4" value="all"><div class="opt-dot"></div><span>Открываю всё примерно одинаково</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">05</div>
+      <div class="q-text">Какие карточки вам откликнулись больше всего? <span style="color:var(--grey);font-weight:400">(можно несколько)</span></div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="q5" value="mind"><div class="opt-sq"></div><span>Мысли / Ойлар</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="self"><div class="opt-sq"></div><span>Забота / Күтім</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="family"><div class="opt-sq"></div><span>Близкие / Жақындар</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="growth"><div class="opt-sq"></div><span>Рост / Өсу</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="plan"><div class="opt-sq"></div><span>Дела / Істер</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="budget"><div class="opt-sq"></div><span>Бюджет</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="opor"><div class="opt-sq"></div><span>Карточки Опоры</span></label>
+        <label class="opt"><input type="checkbox" name="q5" value="sila"><div class="opt-sq"></div><span>Карточки Силы</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">06</div>
+      <div class="q-text">Карточки Опоры и Силы — понятно ли чем они отличаются?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q6" value="yes"><div class="opt-dot"></div><span>Да, всё понятно, использую оба</span></label>
+        <label class="opt"><input type="radio" name="q6" value="partial"><div class="opt-dot"></div><span>Понятно, но использую только один</span></label>
+        <label class="opt"><input type="radio" name="q6" value="unclear"><div class="opt-dot"></div><span>Не совсем понятно, в чём разница</span></label>
+        <label class="opt"><input type="radio" name="q6" value="notused"><div class="opt-dot"></div><span>Ещё не открывала этот раздел</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">07</div>
+      <div class="q-text">Каких тем не хватает в карточках? <span style="color:var(--grey);font-weight:400">(свободный ответ)</span></div>
+      <textarea class="q-textarea" name="q7" placeholder="Например: хочу карточки про усталость от диагноза, про отношения с врачами..."></textarea>
+    </div>
+
+    <!-- ── ТРЕКЕР ── -->
+    <div class="section-tag">Трекер</div>
+
+    <div class="q-card">
+      <div class="q-num">08</div>
+      <div class="q-text">Пользовались ли вы трекером занятий?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q8" value="yes-conv"><div class="opt-dot"></div><span>Да, пользуюсь регулярно — удобно</span></label>
+        <label class="opt"><input type="radio" name="q8" value="yes-meh"><div class="opt-dot"></div><span>Да, но не очень понятно как работает</span></label>
+        <label class="opt"><input type="radio" name="q8" value="once"><div class="opt-dot"></div><span>Попробовала один раз</span></label>
+        <label class="opt"><input type="radio" name="q8" value="no"><div class="opt-dot"></div><span>Не пользовалась</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">09</div>
+      <div class="q-text">Что хотели бы добавить в трекер? <span style="color:var(--grey);font-weight:400">(можно несколько)</span></div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="q9" value="stats"><div class="opt-sq"></div><span>Статистика за месяц</span></label>
+        <label class="opt"><input type="checkbox" name="q9" value="remind"><div class="opt-sq"></div><span>Напоминания (уведомления)</span></label>
+        <label class="opt"><input type="checkbox" name="q9" value="child"><div class="opt-sq"></div><span>Отдельный трекер прогресса ребёнка</span></label>
+        <label class="opt"><input type="checkbox" name="q9" value="specialist"><div class="opt-sq"></div><span>Запись к специалистам</span></label>
+        <label class="opt"><input type="checkbox" name="q9" value="enough"><div class="opt-sq"></div><span>Всё устраивает, ничего не нужно</span></label>
+      </div>
+    </div>
+
+    <!-- ── ЯЗЫК ── -->
+    <div class="section-tag">Язык</div>
+
+    <div class="q-card">
+      <div class="q-num">10</div>
+      <div class="q-text">На каком языке пользуетесь приложением?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q10" value="ru"><div class="opt-dot"></div><span>Русский</span></label>
+        <label class="opt"><input type="radio" name="q10" value="kz"><div class="opt-dot"></div><span>Қазақша</span></label>
+        <label class="opt"><input type="radio" name="q10" value="en"><div class="opt-dot"></div><span>English</span></label>
+      </div>
+    </div>
+
+    <div class="q-card" id="kz-quality" style="display:none">
+      <div class="q-num">10а</div>
+      <div class="q-text">Казахский перевод — насколько он естественный?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q10a" value="natural"><div class="opt-dot"></div><span>Очень хорошо, звучит естественно</span></label>
+        <label class="opt"><input type="radio" name="q10a" value="ok"><div class="opt-dot"></div><span>В целом нормально, но есть странные фразы</span></label>
+        <label class="opt"><input type="radio" name="q10a" value="bad"><div class="opt-dot"></div><span>Много калькированных выражений с русского</span></label>
+      </div>
+      <textarea class="q-textarea" name="q10a_text" placeholder="Если есть конкретные фразы которые звучат неправильно — напишите здесь..." style="margin-top:10px"></textarea>
+    </div>
+
+    <!-- ── МОНЕТИЗАЦИЯ ── -->
+    <div class="section-tag">Монетизация</div>
+
+    <div class="q-card">
+      <div class="q-num">11</div>
+      <div class="q-text">Если бы приложение было платным — сколько готовы платить в месяц?</div>
+      <p class="q-hint">Выберите один вариант</p>
+      <div class="price-grid" id="price-grid">
+        <div class="price-opt" onclick="selectPrice(this,'free')">
+          <input type="radio" name="q11" value="free">
+          <div class="price-amount">0 ₸</div>
+          <div class="price-label">Только бесплатно</div>
+        </div>
+        <div class="price-opt" onclick="selectPrice(this,'500')">
+          <input type="radio" name="q11" value="500">
+          <div class="price-amount">до 500</div>
+          <div class="price-label">тенге/мес</div>
+        </div>
+        <div class="price-opt" onclick="selectPrice(this,'990')">
+          <input type="radio" name="q11" value="990">
+          <div class="price-amount">990</div>
+          <div class="price-label">тенге/мес</div>
+        </div>
+        <div class="price-opt" onclick="selectPrice(this,'1500')">
+          <input type="radio" name="q11" value="1500">
+          <div class="price-amount">1 500</div>
+          <div class="price-label">тенге/мес</div>
+        </div>
+        <div class="price-opt" onclick="selectPrice(this,'2500')">
+          <input type="radio" name="q11" value="2500">
+          <div class="price-amount">2 500</div>
+          <div class="price-label">тенге/мес</div>
+        </div>
+        <div class="price-opt" onclick="selectPrice(this,'more')">
+          <input type="radio" name="q11" value="more">
+          <div class="price-amount">2 500+</div>
+          <div class="price-label">готова больше</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">12</div>
+      <div class="q-text">Что должно быть в платной версии, чтобы вы точно оформили подписку? <span style="color:var(--grey);font-weight:400">(несколько)</span></div>
+      <div class="options">
+        <label class="opt"><input type="checkbox" name="q12" value="more_cards"><div class="opt-sq"></div><span>Больше карточек (сейчас по 12 на тему)</span></label>
+        <label class="opt"><input type="checkbox" name="q12" value="new_weekly"><div class="opt-sq"></div><span>Новые карточки каждую неделю</span></label>
+        <label class="opt"><input type="checkbox" name="q12" value="child_tracker"><div class="opt-sq"></div><span>Трекер прогресса ребёнка</span></label>
+        <label class="opt"><input type="checkbox" name="q12" value="specialists"><div class="opt-sq"></div><span>Расписание специалистов</span></label>
+        <label class="opt"><input type="checkbox" name="q12" value="lola_full"><div class="opt-sq"></div><span>Полные наборы LOLA (сенсорика, моторика, речь)</span></label>
+        <label class="opt"><input type="checkbox" name="q12" value="expert"><div class="opt-sq"></div><span>Консультации или советы от специалистов</span></label>
+        <label class="opt"><input type="checkbox" name="q12" value="community"><div class="opt-sq"></div><span>Сообщество мам</span></label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">13</div>
+      <div class="q-text">Что предпочтительнее?</div>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q13" value="monthly"><div class="opt-dot"></div><span>Ежемесячная подписка (плачу каждый месяц)</span></label>
+        <label class="opt"><input type="radio" name="q13" value="yearly"><div class="opt-dot"></div><span>Годовая подписка со скидкой</span></label>
+        <label class="opt"><input type="radio" name="q13" value="once"><div class="opt-dot"></div><span>Разовая покупка навсегда</span></label>
+        <label class="opt"><input type="radio" name="q13" value="freemium"><div class="opt-dot"></div><span>Бесплатно с покупкой отдельных наборов</span></label>
+      </div>
+    </div>
+
+    <!-- ── БУДУЩЕЕ ── -->
+    <div class="section-tag">Будущее</div>
+
+    <div class="q-card">
+      <div class="q-num">14</div>
+      <div class="q-text">Чего вам больше всего не хватает прямо сейчас?</div>
+      <textarea class="q-textarea" name="q14" placeholder="Опишите своими словами — это самый важный вопрос..."></textarea>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">15</div>
+      <div class="q-text">Насколько вероятно, что вы порекомендуете LOLA другим мамам?</div>
+      <p class="q-hint">0 — точно нет, 10 — точно да</p>
+      <div class="nps-row" id="nps-row"></div>
+      <div class="nps-labels">
+        <span class="nps-lbl">Точно нет</span>
+        <span class="nps-lbl">Точно да</span>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">+</div>
+      <div class="q-text">Есть что добавить? Любые мысли, критика, пожелания.</div>
+      <textarea class="q-textarea" name="bonus" placeholder="Пишите всё что хотите — читаем каждый ответ лично..."></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-wrap">
+      <button type="submit" class="submit-btn">Отправить ответы →</button>
+      <div class="submit-note">Ответы анонимны и хранятся только у автора.<br>Рабига Сагындыкова · LOLA System</div>
+    </div>
+
+  </form>
+
+  <!-- THANK YOU -->
+  <div class="thankyou" id="thankyou">
+    <div class="ty-icon">💛</div>
+    <div class="ty-title">Спасибо!</div>
+    <p class="ty-text">Ваш ответ получен и будет внимательно прочитан.<br><br>
+    Именно такие ответы делают LOLA лучше.<br>
+    Вы помогаете не только себе — но и другим мамам.</p>
+    <div style="margin-top:24px">
+      <a href="https://t.me/Baggi_S" target="_blank" style="display:inline-block;padding:12px 28px;border-radius:50px;background:var(--navy);color:#fff;text-decoration:none;font-size:14px;font-weight:500">Вернуться в Telegram →</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="foot">
+  © 2025 Rabiga Sagyndykova · LOLA System · <a href="https://t.me/Baggi_S" style="color:var(--peach)">t.me/Baggi_S</a>
+</div>
+
+<script>
+// Progress bar
+function updateProgress() {
+  const form = document.getElementById('feedback-form');
+  const inputs = form.querySelectorAll('input[type=radio]:checked, input[type=checkbox]:checked, textarea');
+  let filled = 0;
+  inputs.forEach(inp => {
+    if (inp.tagName === 'TEXTAREA' ? inp.value.trim().length > 0 : true) filled++;
+  });
+  const total = 22;
+  document.getElementById('progress').style.width = Math.min(100, (filled / total * 100)) + '%';
+}
+document.getElementById('feedback-form').addEventListener('change', updateProgress);
+document.getElementById('feedback-form').addEventListener('input', updateProgress);
+
+// Show KZ quality question
+document.querySelectorAll('input[name="q10"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('kz-quality').style.display = r.value === 'kz' ? 'block' : 'none';
+  });
+});
+
+// Price selector
+function selectPrice(el, val) {
+  document.querySelectorAll('.price-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+}
+
+// NPS
+const npsRow = document.getElementById('nps-row');
+let npsVal = null;
+for (let i = 0; i <= 10; i++) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'nps-btn';
+  btn.textContent = i;
+  btn.addEventListener('click', () => {
+    npsVal = i;
+    document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    updateProgress();
+  });
+  npsRow.appendChild(btn);
+}
+
+// Radio/checkbox visual sync
+document.querySelectorAll('.opt input').forEach(inp => {
+  inp.addEventListener('change', () => {
+    if (inp.type === 'radio') {
+      const name = inp.name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+        r.closest('.opt').style.background = '';
+        r.closest('.opt').style.borderColor = '';
+      });
+    }
+    if (inp.checked) {
+      inp.closest('.opt').style.borderColor = '#E8956D';
+      inp.closest('.opt').style.background = 'rgba(232,149,109,.06)';
+    } else {
+      inp.closest('.opt').style.background = '';
+      inp.closest('.opt').style.borderColor = '';
+    }
+  });
+});
+
+// Submit — send to Telegram via bot API or just collect locally
+document.getElementById('feedback-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const data = {};
+  for (const [k, v] of fd.entries()) {
+    if (data[k]) {
+      data[k] = Array.isArray(data[k]) ? [...data[k], v] : [data[k], v];
+    } else {
+      data[k] = v;
+    }
+  }
+  data.nps = npsVal;
+  data.ts = new Date().toISOString();
+
+  // Format message for Telegram
+  const lines = [
+    '📋 *Новый фидбек LOLA System*',
+    '',
+    `01 Откуда: ${data.q1 || '—'}`,
+    `02 Стаж: ${data.q2 || '—'}`,
+    `03 Другие инструменты: ${data.q3 || '—'}`,
+    `04 Любимый раздел: ${data.q4 || '—'}`,
+    `05 Откликнулись: ${[].concat(data.q5||[]).join(', ')||'—'}`,
+    `06 Понятность Опора/Сила: ${data.q6 || '—'}`,
+    `07 Не хватает тем: ${data.q7 || '—'}`,
+    `08 Трекер: ${data.q8 || '—'}`,
+    `09 Добавить в трекер: ${[].concat(data.q9||[]).join(', ')||'—'}`,
+    `10 Язык: ${data.q10 || '—'}`,
+    `10а Качество КЗ: ${data.q10a || '—'} | ${data.q10a_text || ''}`,
+    `11 Цена: ${data.q11 || '—'} ₸`,
+    `12 Нужно для подписки: ${[].concat(data.q12||[]).join(', ')||'—'}`,
+    `13 Формат оплаты: ${data.q13 || '—'}`,
+    `14 Не хватает: ${data.q14 || '—'}`,
+    `15 NPS: ${data.nps !== null ? data.nps : '—'}/10`,
+    `+  Доп: ${data.bonus || '—'}`,
+  ];
+
+  const msg = lines.join('\n');
+
+  // REPLACE BOT_TOKEN and CHAT_ID with your values
+  const BOT_TOKEN = '8723490664:AAEzwbHX8q03mmV2GrSZwI-dglqAnge8WNA';
+  const CHAT_ID = '592903795';
+
+  try {
+    if (BOT_TOKEN !== '8723490664:AAEzwbHX8q03mmV2GrSZwI-dglqAnge8WNA') {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: msg,
+          parse_mode: 'Markdown'
+        })
+      });
+    }
+  } catch(err) {
+    console.log('Telegram send failed:', err);
+  }
+
+  // Show thank you
+  document.getElementById('feedback-form').style.display = 'none';
+  document.getElementById('thankyou').classList.add('show');
+  document.getElementById('progress').style.width = '100%';
+  window.scrollTo(0, 0);
+});
+</script>
+</body>
+</html>
