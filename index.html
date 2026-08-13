@@ -1,0 +1,2098 @@
+<html lang="ru" style="--tg-viewport-height:100vh; --tg-viewport-stable-height:100vh;"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LOLA System</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=DM+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A4A;--navy2:#2C4068;--peach:#E8956D;--peachl:#F5C9B0;
+  --cream:#FDF8F2;--green:#5A9B87;--blue:#4A7FA5;--purple:#7B6BAE;
+  --amber:#C4892A;--grey:#8A8A8A;--light:#F0EDE8;--white:#FFFFFF;--dark:#1A1A1A;
+  --r:16px;--rs:10px;--sh:0 4px 24px rgba(27,42,74,.10);--sh2:0 2px 8px rgba(27,42,74,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none;background:var(--cream)}
+body{font-family:'DM Sans',sans-serif;color:var(--dark);overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+/* ── OVERLAYS ── */
+.overlay{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column}
+.overlay.hidden{display:none}
+
+/* LANG */
+#lang-overlay{background:var(--navy);align-items:center;justify-content:center;gap:14px;padding:24px}
+.lang-title{font-family:'Playfair Display',serif;font-size:28px;color:#fff;text-align:center;margin-bottom:4px}
+.lang-sub{font-size:12px;color:var(--peachl);text-align:center;line-height:1.6;margin-bottom:12px}
+.lang-btn{width:230px;padding:14px 20px;border-radius:14px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .15s}
+.lang-btn:active{border-color:var(--peach);background:rgba(232,149,109,.2)}
+.flag{font-size:26px}
+
+/* ONBOARDING */
+#onboard-overlay{background:var(--cream);overflow-y:auto}
+.onboard-inner{padding:20px 20px 40px;max-width:440px;margin:0 auto}
+.onboard-logo{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:4px}
+.onboard-sub{font-size:11px;color:var(--grey);letter-spacing:.8px;text-transform:uppercase;margin-bottom:24px}
+.onboard-step{display:flex;gap:12px;margin-bottom:20px;align-items:flex-start}
+.step-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;margin-top:2px}
+.step-body h3{font-size:14px;font-weight:500;color:var(--dark);margin-bottom:4px}
+.step-body p{font-size:12.5px;color:var(--grey);line-height:1.55}
+.onboard-divider{height:1px;background:var(--light);margin:20px 0}
+.trial-badge{background:var(--navy);border-radius:14px;padding:16px;margin-bottom:20px;text-align:center}
+.trial-days{font-family:'Playfair Display',serif;font-size:36px;color:var(--peach);line-height:1}
+.trial-lbl{font-size:12px;color:var(--peachl);margin-top:4px}
+.trial-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;line-height:1.4}
+.btn-start{width:100%;padding:15px;border-radius:14px;border:none;background:var(--peach);color:#fff;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:8px}
+.btn-start:active{opacity:.9}
+
+/* TRIAL EXPIRED */
+#trial-overlay{background:var(--navy);align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center}
+.trial-exp-title{font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:8px}
+.trial-exp-sub{font-size:13px;color:var(--peachl);line-height:1.6;margin-bottom:8px;max-width:280px}
+.pay-btn{width:260px;padding:14px 20px;border-radius:14px;border:none;background:var(--peach);color:#fff;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer}
+.pay-btn-sec{width:260px;padding:12px 20px;border-radius:14px;border:2px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.7);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer}
+
+/* HEADER */
+.header{flex-shrink:0;background:var(--navy);padding:12px 16px 10px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;right:-20px;top:-20px;width:90px;height:90px;border-radius:50%;background:rgba(232,149,109,.1)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between}
+.hdr-brand{font-family:'Playfair Display',serif;font-size:16px;color:#fff}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-trial{font-size:10px;background:rgba(232,149,109,.25);color:var(--peach);padding:3px 8px;border-radius:6px;cursor:pointer}
+.lang-sw{font-size:10px;color:var(--peachl);cursor:pointer;padding:3px 6px}
+.hdr-sub{font-size:9px;color:var(--peachl);letter-spacing:.8px;text-transform:uppercase;margin-top:2px}
+.hdr-week-lbl{font-size:10px;color:rgba(255,255,255,.4);display:block}
+.hdr-week-num{font-size:12px;color:var(--peach);font-weight:500}
+
+/* CONTENT + NAV */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{display:none}
+.nav{flex-shrink:0;display:flex;background:#fff;border-top:1px solid rgba(0,0,0,.06);padding-bottom:env(safe-area-inset-bottom,0)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px 6px;gap:3px;cursor:pointer;position:relative}
+.nav-btn svg{width:22px;height:22px;stroke:var(--grey);transition:stroke .15s}
+.nav-btn span{font-size:10px;color:var(--grey);transition:color .15s}
+.nav-btn.active svg{stroke:var(--navy)}
+.nav-btn.active span{color:var(--navy);font-weight:500}
+.nav-btn.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:var(--peach);border-radius:2px 2px 0 0}
+
+/* SCREENS */
+.screen{display:none;min-height:100%}
+.screen.active{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.screen.active{animation:fadeSlide .18s ease}
+
+/* HELP TOOLTIP */
+.help-chip{display:inline-flex;align-items:center;gap:5px;background:var(--light);border-radius:8px;padding:6px 10px;font-size:11.5px;color:var(--grey);cursor:pointer;margin:0 16px 10px}
+.help-chip svg{width:13px;height:13px;stroke:var(--grey)}
+.help-box{margin:0 16px 12px;background:#fff;border-radius:var(--rs);padding:12px 14px;box-shadow:var(--sh2);border-left:3px solid var(--peach)}
+.help-box p{font-size:12px;color:var(--dark);line-height:1.6;margin-bottom:4px}
+.help-box p:last-child{margin-bottom:0}
+
+/* CARDS SCREEN */
+.cat-row{display:flex;gap:8px;padding:12px 16px 8px;overflow-x:auto;scrollbar-width:none}
+.mode-bar{display:flex;gap:6px;padding:12px 16px 0}
+.mode-chip{flex:1;text-align:center;padding:9px 4px;border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid transparent;transition:.15s;line-height:1.2}
+.mode-hint{font-size:12px;color:var(--grey);padding:6px 18px 0;min-height:14px}
+.cat-row::-webkit-scrollbar{display:none}
+.cat-chip{flex-shrink:0;padding:7px 14px;border-radius:50px;font-size:12.5px;font-weight:500;cursor:pointer;border:1.5px solid transparent;transition:all .2s;white-space:nowrap}
+.streak-wrap{margin:0 16px 10px;background:#fff;border-radius:var(--rs);padding:11px 14px;box-shadow:var(--sh2)}
+.streak-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.streak-lbl{font-size:12px;color:var(--grey)}
+.streak-cnt{font-size:12px;font-weight:500;color:var(--navy)}
+.streak-days{display:flex;gap:5px}
+.s-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.s-dot{width:100%;height:6px;border-radius:3px;background:var(--light)}
+.s-dot.done{background:var(--green)}
+.s-dot.today{background:var(--peach);opacity:.5}
+.s-lbl{font-size:9px;color:var(--grey)}
+.card-wrap{padding:0 16px 16px}
+
+/* THE CARD */
+.day-card{border-radius:20px;padding:22px 20px 18px;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh)}
+.card-deco{position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;opacity:.1}
+.card-cat{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;opacity:.7}
+.card-text{font-family:'Playfair Display',serif;font-size:17px;line-height:1.55;color:#1a1a1a;padding-right:8px;min-height:80px}
+.card-counter{font-size:11px;color:var(--grey);margin-top:12px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-nav{display:flex;gap:6px;margin-top:4px}
+.btn-done{flex:1;padding:11px;border-radius:12px;border:none;font-size:13.5px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-done:active{transform:scale(.97)}
+.btn-prev,.btn-next{width:44px;padding:11px;border-radius:12px;background:var(--light);border:none;font-size:16px;cursor:pointer;color:var(--dark)}
+.done-state{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;margin-top:4px;display:flex;align-items:center;gap:8px}
+
+/* TRACKER */
+.sec-head{padding:14px 16px 8px;display:flex;align-items:center;justify-content:space-between}
+.sec-title{font-size:14px;font-weight:500;color:var(--dark)}
+.sec-sub{font-size:11px;color:var(--grey)}
+.week-card{margin:0 16px 10px;background:#fff;border-radius:var(--r);padding:14px;box-shadow:var(--sh2)}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day-cell{display:flex;flex-direction:column;align-items:center;gap:4px}
+.day-name{font-size:9px;color:var(--grey);text-transform:uppercase}
+.day-box{width:100%;aspect-ratio:1;border-radius:8px;border:1.5px solid var(--light);background:var(--cream);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-size:13px}
+.day-box.done{background:var(--green);border-color:var(--green);color:#fff}
+.day-box.today{border-color:var(--peach);border-width:2px}
+.mods-wrap{margin:0 16px 10px}
+.mod-card{background:#fff;border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;box-shadow:var(--sh2);display:flex;align-items:center;gap:12px}
+.mod-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mod-icon span{font-size:13px;font-weight:600;color:#fff}
+.mod-info{flex:1}
+.mod-name{font-size:13px;font-weight:500;color:var(--dark)}
+.mod-sub{font-size:11px;color:var(--grey);margin-top:1px}
+.mod-dots{display:flex;gap:4px}
+.mod-dot{width:10px;height:10px;border-radius:3px;border:1.5px solid var(--light);background:var(--cream);cursor:pointer;transition:all .15s}
+
+/* NOTES */
+.notes-wrap{margin:0 16px 16px}
+.notes-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.notes-title{font-size:13px;font-weight:500;color:var(--dark)}
+.notes-add{background:none;border:none;color:var(--peach);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:4px}
+.note-item{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:6px;box-shadow:var(--sh2);display:flex;align-items:flex-start;gap:8px}
+.note-star{color:var(--amber);font-size:14px;flex-shrink:0;margin-top:1px}
+.note-text{flex:1;font-size:13px;color:var(--dark);line-height:1.4;word-break:break-word}
+.note-del{background:none;border:none;font-size:16px;color:var(--grey);cursor:pointer;padding:0 2px;flex-shrink:0}
+.note-inp-wrap{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:var(--sh2);display:flex;gap:8px;align-items:flex-end}
+.note-inp{flex:1;border:none;background:transparent;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--dark);resize:none;outline:none;line-height:1.4}
+.note-send{background:var(--peach);border:none;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+/* MIND */
+.mind-intro{margin:12px 16px 0;background:var(--navy);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.mind-intro::after{content:'';position:absolute;right:-20px;bottom:-20px;width:80px;height:80px;border-radius:50%;background:rgba(232,149,109,.15)}
+.mind-intro-title{font-size:13px;font-weight:500;color:#fff;margin-bottom:6px}
+.mind-intro-p{font-size:11.5px;color:var(--peachl);line-height:1.55}
+.mind-tabs{display:flex;margin:12px 16px 0;gap:8px}
+.mind-tab{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--light);background:#fff;font-size:12.5px;font-weight:500;cursor:pointer;text-align:center;color:var(--grey);font-family:'DM Sans',sans-serif;transition:all .15s}
+.mind-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.mind-type-desc{margin:8px 16px 0;font-size:12px;color:var(--grey);padding:8px 12px;background:var(--light);border-radius:8px;line-height:1.5}
+.mind-card{border-radius:20px;margin:10px 16px;padding:22px 20px;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--sh);position:relative;overflow:hidden}
+.mind-badge{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.mind-text{font-family:'Playfair Display',serif;font-size:18px;line-height:1.6;flex:1}
+.mind-foot{margin-top:16px;display:flex;justify-content:space-between;align-items:center}
+.mind-num{font-size:11px;color:var(--grey)}
+.mind-acts{padding:0 16px 16px;display:flex;gap:10px}
+
+/* LOLA CARDS PREVIEW */
+.lola-section{margin:0 16px 16px}
+.lola-head{font-size:13px;font-weight:500;color:var(--dark);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.lola-head-sub{font-size:11px;color:var(--grey)}
+.lola-module{background:#fff;border-radius:var(--r);box-shadow:var(--sh2);overflow:hidden;margin-bottom:10px}
+.lola-mod-header{padding:12px 14px;display:flex;align-items:center;gap:10px}
+.lola-mod-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0}
+.lola-mod-name{font-size:13px;font-weight:500;color:var(--dark)}
+.lola-mod-sub{font-size:11px;color:var(--grey)}
+.lola-cards-row{display:flex;gap:8px;padding:0 14px 12px;overflow-x:auto;scrollbar-width:none}
+.lola-cards-row::-webkit-scrollbar{display:none}
+.lola-mini-card{flex-shrink:0;width:180px;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;color:var(--dark)}
+.lola-cta{margin:4px 14px 12px;padding:10px 14px;border-radius:10px;border:none;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;width:calc(100% - 28px);display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* PROGRESS */
+.prog-hero{margin:16px;background:var(--navy);border-radius:var(--r);padding:20px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--sh)}
+.prog-num{font-family:'Playfair Display',serif;font-size:48px;color:#fff;line-height:1}
+.prog-lbl{font-size:12px;color:rgba(255,255,255,.45);margin-top:4px}
+.prog-ring{width:70px;height:70px;position:relative}
+.prog-ring svg{transform:rotate(-90deg)}
+.prog-ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--peach)}
+.weeks-sec{margin:0 16px 16px}
+.week-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.week-n{font-size:11px;color:var(--grey);width:22px}
+.week-bg{flex:1;height:8px;border-radius:4px;background:var(--light);overflow:hidden}
+.week-bar{height:100%;border-radius:4px;background:var(--navy)}
+.week-val{font-size:11px;color:var(--grey);width:16px;text-align:right}
+.victs-sec{margin:0 16px 12px}
+.v-item{background:#fff;border-radius:var(--rs);padding:10px 12px;margin-bottom:6px;box-shadow:var(--sh2)}
+.v-week{font-size:10px;color:var(--grey);margin-bottom:2px}
+.v-text{font-size:13px;color:var(--dark);line-height:1.4}
+
+/* RESET */
+.reset-sec{margin:0 16px 32px;border-top:1px solid var(--light);padding-top:14px}
+.about-sec{margin:0 16px 40px;border-top:1px solid var(--light);padding-top:16px}
+.about-title{font-size:15px;font-weight:600;color:var(--dark);margin-bottom:8px}
+.about-text{font-size:13px;line-height:1.55;color:var(--grey);margin-bottom:14px}
+.about-btn{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:14px}
+.about-support{background:#FBF3E8;border-radius:12px;padding:13px 14px}
+.about-support-title{font-size:13px;font-weight:600;color:#C4892A;margin-bottom:6px}
+.about-support-text{font-size:12px;line-height:1.6;color:#7A6A4A;white-space:pre-line}
+.reset-lbl{font-size:11px;color:var(--grey);margin-bottom:8px}
+.reset-btn{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid var(--light);background:#fff;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--dark);cursor:pointer;margin-bottom:6px;display:flex;align-items:center;gap:10px;text-align:left}
+.reset-btn.danger{border-color:#FFD0C8;background:#FFF5F4;color:#C0392B}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:800;display:none;align-items:flex-end;justify-content:center}
+.modal-bg.open{display:flex}
+.modal-box{background:#fff;border-radius:20px 20px 0 0;padding:22px 20px 32px;width:100%;max-width:480px}
+.modal-title{font-size:16px;font-weight:500;margin-bottom:8px;color:var(--dark)}
+.modal-body{font-size:13px;color:var(--grey);margin-bottom:20px;line-height:1.55}
+.modal-btns{display:flex;gap:10px}
+.modal-cancel{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--light);background:#fff;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--grey);cursor:pointer}
+.modal-confirm{flex:1;padding:12px;border-radius:10px;border:none;background:#C0392B;font-size:14px;font-family:'DM Sans',sans-serif;color:#fff;font-weight:500;cursor:pointer}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:50px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;pointer-events:none;z-index:100;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* TRIAL BANNER */
+.trial-banner{margin:10px 16px 0;padding:8px 12px;border-radius:10px;background:rgba(232,149,109,.12);border:1px solid rgba(232,149,109,.3);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.trial-banner-txt{font-size:12px;color:var(--peach);font-weight:500}
+.trial-banner-sub{font-size:10px;color:var(--grey)}
+</style>
+</head>
+<body>
+
+<!-- LANG OVERLAY -->
+<div class="overlay" id="lang-overlay">
+  <div class="lang-title">LOLA System</div>
+  <div class="lang-sub">Love · Observation · Logic · Analysis<br>Выбери язык · Тілді таңда · Choose language</div>
+  <button class="lang-btn" onclick="setLang('ru')"><span class="flag">🇷🇺</span> Русский</button>
+  <button class="lang-btn" onclick="setLang('kz')"><span class="flag">🇰🇿</span> Қазақша</button>
+  <button class="lang-btn" onclick="setLang('en')"><span class="flag">🇬🇧</span> English</button>
+</div>
+
+
+<!-- WELCOME / ABOUT SCREEN -->
+<div class="overlay hidden" id="welcome-overlay" style="background:var(--navy);overflow-y:auto;padding:0">
+  <div style="max-width:440px;margin:0 auto;padding:24px 24px 40px">
+    <!-- Logo -->
+    <div style="text-align:center;padding:20px 0 16px">
+      <div style="font-family:'Playfair Display',serif;font-size:30px;color:#fff;margin-bottom:4px">LOLA System</div>
+      <div style="font-size:11px;color:var(--peachl);letter-spacing:1.2px;text-transform:uppercase">Love · Observation · Logic · Analysis</div>
+    </div>
+    <!-- Hero -->
+    <div style="background:rgba(255,255,255,.07);border-radius:16px;padding:18px;margin-bottom:20px;border:1px solid rgba(255,255,255,.1)">
+      <div style="font-family:'Playfair Display',serif;font-size:20px;color:#fff;margin-bottom:8px;line-height:1.4" id="welcome-title">Поддержка мамы. Каждый день.</div>
+      <div style="font-size:13px;color:var(--peachl);line-height:1.65" id="welcome-desc">Это приложение создано для мам детей с особыми потребностями. Оно помогает не потерять себя в заботе о ребёнке — находить точки опоры каждый день.</div>
+    </div>
+    <!-- For whom -->
+    <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px" id="welcome-for-whom-lbl">Для кого</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px" id="welcome-for-whom"></div>
+    <!-- What inside -->
+    <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px" id="welcome-inside-lbl">Что внутри</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px" id="welcome-inside"></div>
+    <!-- Free -->
+    <div style="background:rgba(232,149,109,.15);border:1px solid rgba(232,149,109,.3);border-radius:12px;padding:14px;text-align:center;margin-bottom:20px">
+      <div style="font-size:13px;color:var(--peachl);line-height:1.5" id="welcome-trial-lbl">Бесплатно — все функции открыты 💛</div>
+    </div>
+    <!-- CTA -->
+    <button onclick="startFromWelcome()" style="width:100%;padding:16px;border-radius:14px;border:none;background:var(--peach);color:#fff;font-size:16px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer" id="welcome-cta">Начать →</button>
+    <div style="font-size:11px;color:rgba(255,255,255,.3);text-align:center;margin-top:10px" id="welcome-author">Автор: Рабига Сагындыкова · lola.system</div>
+  </div>
+</div>
+
+<!-- ONBOARDING OVERLAY -->
+<div class="overlay hidden" id="onboard-overlay">
+  <div class="onboard-inner" id="onboard-inner">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- TRIAL EXPIRED OVERLAY -->
+<div class="overlay hidden" id="trial-overlay">
+  <div style="font-size:40px;margin-bottom:8px">⏰</div>
+  <div class="trial-exp-title" id="trial-exp-title">Пробный период завершён</div>
+  <div class="trial-exp-sub" id="trial-exp-sub">Вы использовали все 7 дней бесплатного доступа. Продолжите — всего 990 ₸ в месяц.</div>
+  <button class="pay-btn" onclick="goToPay()">Оформить подписку</button>
+  <button class="pay-btn-sec" onclick="showTrial()">Посмотреть приложение</button>
+</div>
+
+<div class="app">
+  <div class="header">
+    <div class="hdr-row">
+      <div>
+        <div class="hdr-brand">LOLA System</div>
+        <div class="hdr-sub">Love · Observation · Logic · Analysis</div>
+      </div>
+      <div class="hdr-right">
+        <span class="hdr-trial" id="trial-badge" onclick="showTrialInfo()"></span>
+        <span class="lang-sw" id="lang-sw" onclick="showLangPicker()">RU</span>
+        <div style="text-align:right">
+          <span class="hdr-week-lbl" id="hdr-week-lbl">Неделя</span>
+          <span class="hdr-week-num" id="hdr-week-num">1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content" id="content">
+
+    <!-- CARDS -->
+    <div class="screen active" id="screen-cards">
+      <div class="mode-bar" id="mode-bar"></div>
+      <div class="mode-hint" id="mode-hint"></div>
+      <div class="cat-row" id="cat-row"></div>
+      <div class="streak-wrap">
+        <div class="streak-top">
+          <span class="streak-lbl" id="streak-lbl">Серия недели</span>
+          <span class="streak-cnt" id="streak-cnt">0 / 7</span>
+        </div>
+        <div class="streak-days" id="streak-days"></div>
+      </div>
+      <div class="card-wrap" id="card-wrap"></div>
+    </div>
+
+    <!-- TRACKER -->
+    <div class="screen" id="screen-tracker">
+      <div id="tracker-help-wrap">
+        <div class="help-chip" onclick="toggleHelp('tracker')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span id="tracker-help-lbl"></span>
+        </div>
+        <div class="help-box hidden" id="tracker-help-box"></div>
+      </div>
+      <div class="sec-head"><span class="sec-title" id="this-week-lbl"></span><span class="sec-sub" id="week-dates"></span></div>
+      <div class="week-card"><div class="week-grid" id="week-grid"></div></div>
+      <div class="sec-head"><span class="sec-title" id="lola-mod-lbl"></span><span class="sec-sub" id="tap-dots-lbl"></span></div>
+      <div class="mods-wrap" id="mods-wrap"></div>
+      <div class="notes-wrap">
+        <div class="notes-head">
+          <span class="notes-title" id="notes-title"></span>
+          <button class="notes-add" onclick="addNoteMode()" id="notes-add-btn"></button>
+        </div>
+        <div id="notes-list"></div>
+        <div class="note-inp-wrap hidden" id="note-inp-wrap">
+          <textarea class="note-inp" id="note-inp" rows="2" placeholder="Сегодня он/она..."></textarea>
+          <button class="note-send" onclick="submitNote()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIND -->
+    <div class="screen" id="screen-mind">
+      <div class="mind-intro">
+        <div class="mind-intro-title" id="mind-intro-title"></div>
+        <div class="mind-intro-p" id="mind-intro-p"></div>
+      </div>
+      <div class="mind-tabs">
+        <button class="mind-tab active" id="tab-opor" onclick="switchMindTab('opor')"></button>
+        <button class="mind-tab" id="tab-sila" onclick="switchMindTab('sila')"></button>
+      </div>
+      <div class="mind-type-desc" id="mind-type-desc"></div>
+      <div id="mind-card-wrap"></div>
+      <div class="mind-acts" id="mind-acts"></div>
+    </div>
+
+    <!-- LOLA CARDS -->
+    <div class="screen" id="screen-lola">
+      <div style="padding:14px 16px 0">
+        <div style="font-size:14px;font-weight:500;color:var(--dark)" id="lola-screen-title"></div>
+        <div style="font-size:12px;color:var(--grey);margin-top:4px;line-height:1.5" id="lola-screen-sub"></div>
+      </div>
+      <div id="lola-modules-wrap" style="padding:12px 0 16px"></div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="screen" id="screen-progress">
+      <div class="prog-hero">
+        <div><div class="prog-num" id="prog-num">0</div><div class="prog-lbl" id="prog-lbl">карточек выполнено</div></div>
+        <div class="prog-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="6"></circle>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#E8956D" stroke-width="6" stroke-dasharray="175.9" id="prog-circle" stroke-dashoffset="175.9" stroke-linecap="round"></circle>
+          </svg>
+          <div class="prog-ring-txt" id="prog-pct">0%</div>
+        </div>
+      </div>
+      <div class="sec-head"><span class="sec-title" id="by-weeks-lbl">По неделям</span></div>
+      <div class="weeks-sec" id="weeks-sec"></div>
+      <div class="sec-head"><span class="sec-title" id="victs-lbl">Мои и детские победы</span></div>
+      <div class="victs-sec" id="victs-sec"></div>
+      <div class="reset-sec">
+        <div class="reset-lbl" id="reset-lbl">Управление данными</div>
+        <button class="reset-btn" onclick="confirmReset('week')">🔄 <span id="reset-week-lbl"></span></button>
+        <button class="reset-btn danger" onclick="confirmReset('all')">🗑 <span id="reset-all-lbl"></span></button>
+      </div>
+
+      <div class="about-sec">
+        <div class="about-title" id="about-title">О проекте</div>
+        <div class="about-text" id="about-text"></div>
+        <button class="about-btn" id="about-fb-btn" onclick="openFeedback()"></button>
+        <div class="about-support" id="about-support">
+          <div class="about-support-title" id="about-support-title"></div>
+          <div class="about-support-text" id="about-support-text"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <nav class="nav">
+    <div class="nav-btn active" onclick="switchScreen('cards',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="3" width="9" height="9" rx="2"></rect><rect x="13" y="3" width="9" height="9" rx="2"></rect><rect x="2" y="13" width="9" height="9" rx="2"></rect><rect x="13" y="13" width="9" height="9" rx="2"></rect></svg>
+      <span id="nav0"></span>
+    </div>
+    <div class="nav-btn" onclick="switchScreen('tracker',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="9 16 11 18 15 14"></polyline></svg>
+      <span id="nav1"></span>
+    </div>
+    <div class="nav-btn" onclick="switchScreen('mind',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+      <span id="nav2"></span>
+    </div>
+    <div class="nav-btn" onclick="switchScreen('lola',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <span id="nav3"></span>
+    </div>
+    <div class="nav-btn" onclick="switchScreen('progress',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      <span id="nav4"></span>
+    </div>
+  </nav>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Подтвердить</div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()" id="modal-cancel">Отмена</button>
+      <button class="modal-confirm" onclick="doReset()" id="modal-confirm">Сбросить</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════
+// I18N
+// ═══════════════════════════════
+
+// ═══════════════════════════════
+// DATA — all languages
+// Keys: silaTab/oporaTab for labels, silaCards/oporCards for arrays
+// ═══════════════════════════════
+const LANG_META = {
+  ru: { switchLbl:'RU' },
+  kz: { switchLbl:'ҚАЗ' },
+  en: { switchLbl:'EN' },
+};
+
+// ── RUSSIAN ──────────────────────────────────────────────────────
+const RU = {
+  week:'Неделя', nav:['Карточки','Трекер','Опора','Папа','Итог'],
+  doneTxt:'✓  Сделала', doneState:'✓ Выполнено', streakLbl:'Серия недели',
+  thisWeek:'Эта неделя', modLbl:'Как я о себе позаботилась', tapDots:'отметь, что было',
+  modeLabels:{red:'Тяжело',yellow:'Немного сил',green:'Есть ресурс'},
+  modeHints:{red:'Сегодня — только самые лёгкие карточки. Больше ничего не нужно.',yellow:'Карточки полегче, без нагрузки.',green:'Показаны все карточки сферы.'},
+  notesTitle:'⭐ Что получилось у меня и у ребёнка', notesAdd:'+ добавить', notePh:'Сегодня получилось...',
+  oporaTab:'Опора', silaTab:'Сила',
+  mindIntroTitle:'Поддержка мамы',
+  oporaDesc:'Карточки Опоры — для дней когда сил нет. Читай одну, возвращайся сколько нужно. Не требует ничего — только прочитать.',
+  silaDesc:'Карточки Силы — когда нужен импульс идти вперёд. Один конкретный шаг или мысль.',
+  oporaLbl:'Карточка Опоры', silaLbl:'Карточка Силы',
+  readBtn:'Прочитала', cardOf:'Карточка', cardFrom:'из',
+  totalLbl:'карточек выполнено', byWeeks:'По неделям', victsLbl:'Мои и детские победы',
+  aboutTitle:'О проекте',
+  aboutText:'Это проект для таких же уставших мам, как я. Мам, которым нужна поддержка и помощь — чтобы разгрести завалы по разным сферам жизни и навести в них немного порядка. Ты не одна.',
+  aboutFbBtn:'💬 Отзыв, предложение или баг',
+  aboutFbMsg:'Здравствуйте! У меня отзыв по приложению LOLA: ',
+  aboutSupportTitle:'💛 Поддержать проект',
+  aboutSupportText:'Приложение бесплатное и таким останется. Если есть возможность и желание поддержать — буду благодарна, но это совсем не обязательно.\nVisa 4400 4303 6006 3348 (Serik Lakpayev)\nKaspi +7 747 587 9943 (Серик Л.)',
+  victEmpty:'Здесь появятся твои и детские маленькие победы', toastDone:'Отлично! ✓', toastRead:'Прочитано ✓', toastSaved:'Сохранено ✓',
+  resetLbl:'Управление данными', resetWeek:'Новая неделя — сбросить трекер',
+  resetAll:'Полный сброс всех данных', resetWeekTitle:'Новая неделя',
+  resetWeekBody:'Трекер дней, серия и модули сброшены. Карточки и заметки сохранены.',
+  resetAllTitle:'Полный сброс', resetAllBody:'Все данные будут удалены. Нельзя отменить.',
+  cancel:'Отмена', confirm:'Сбросить',
+  trialExpTitle:'Пробный период завершён',
+  trialExpSub:'Вы использовали все 7 дней. Продолжите за 990 ₸ в месяц.',
+  payBtn:'Оформить подписку', peekBtn:'Посмотреть',
+  trackerHelpLbl:'Как пользоваться трекером',
+  trackerHelp:'<p><b>Дни недели</b> — отмечай день, когда получилось хоть немного позаботиться о себе. Нажми на квадрат.</p><p><b>Как я о себе позаботилась</b> — отметь, что сегодня было: пауза, просьба о помощи, участие близких. Это не задачи — просто заметь, что уже есть.</p><p><b>Заметки</b> — запиши, что получилось у тебя или у ребёнка. Без обязательств, для себя.</p>',
+  lolaTitle:'LOLA — карточки занятий', lolaSub:'Три набора для домашних занятий с ребёнком. Ниже — примеры карточек.',
+  lolaExamples:'3 примера',
+  lolaCtaFull:'Купить полный набор →', lolaCtaInfo:'Подробнее о наборе',
+  welcomeTitle:'Поддержка мамы. Каждый день.',
+  welcomeDesc:'Это приложение создано для мам детей с особыми потребностями. Оно помогает не потерять себя в заботе о ребёнке — находить точки опоры каждый день.',
+  welcomeForWhomLbl:'Для кого',
+  welcomeForWhom:[
+    {icon:'💛',text:'Мам детей с ЗПР, ДЦП, РАС и другими особенностями развития'},
+    {icon:'📅',text:'Тех кто устал и хочет видеть прогресс — свой и ребёнка'},
+    {icon:'🌿',text:'Тех кто ищет поддержку и простые инструменты для каждого дня'},
+  ],
+  welcomeInsideLbl:'Что внутри',
+  welcomeInside:[
+    {icon:'▦',label:'6 тем',sub:'Карточки планирования для мамы'},
+    {icon:'✓',label:'Трекер',sub:'Занятия и серия недели'},
+    {icon:'☺',label:'Опора + Сила',sub:'25+28 карточек поддержки'},
+    {icon:'📖',label:'LOLA',sub:'Примеры занятий с ребёнком'},
+  ],
+  welcomeTrialLbl:'Бесплатно — все функции открыты 💛',
+  welcomeCta:'Начать →',
+  welcomeAuthor:'Автор: Рабига Сагындыкова · lola.system',
+  onboardTitle:'Добро пожаловать', onboardSub:'Поддержка мамы. Каждый день.',
+  trialInfo:'Бесплатно. Все функции открыты.', startBtn:'Начать',
+  onboardSteps:[
+    {icon:'▦',bg:'#F0EDF8',title:'Карточки планирования',desc:'6 категорий — мысли, забота, близкие, рост, дела, бюджет. Одна карточка в день даёт точку опоры.'},
+    {icon:'✓',bg:'#EAF5F1',title:'Трекер занятий',desc:'Отмечай дни занятий с ребёнком. Записывай победы.'},
+    {icon:'☺',bg:'#EAF2FA',title:'Опора и Сила',desc:'Два набора для мамы. Опора — когда нет сил. Сила — когда нужен толчок.'},
+    {icon:'📖',bg:'#EAF5F1',title:'LOLA карточки',desc:'Развивающие карточки для ребёнка: сенсорика, моторика, речь.'},
+  ],
+  days:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],
+  momState:[
+    {id:'pause',txt:'Сделала паузу для себя',hint:'даже несколько минут'},
+    {id:'help',txt:'Попросила о помощи'},
+    {id:'nokick',txt:'Не ругала себя сегодня'},
+    {id:'adult',txt:'Кто-то из близких взял часть заботы',hint:'ты не одна тянешь'},
+    {id:'notalone',txt:'Провела время не одна с ребёнком'},
+  ],
+  papaTitle:'Для папы или близкого взрослого',
+  papaSub:'Покажи эти карточки партнёру. Это не претензия — это подсказки, как быть рядом и разделить нагрузку.',
+  papaLinkTxt:'Наборы LOLA для занятий с ребёнком →',
+  papaLink:'https://t.me/Baggi_S',
+  papaShareBtn:'Поделиться с папой',
+  papaShareIntro:'Это из приложения, которое помогает мамам особых детей. Там есть карточки для пап — не претензия, а подсказки, как быть рядом. Эта про меня, поэтому делюсь 💛',
+  papaShareSign:'LOLA — поддержка для мам: t.me/lolasystemcrds_bot',
+  papaShareCopied:'Скопировано — можно вставить в чат ✓',
+  papaGroups:[
+    {title:'Эмоциональное присутствие',color:'#7B6BAE',cards:[
+      'Спроси: «Тебе сейчас нужно, чтобы я послушал, помог решить или просто побыл рядом?»',
+      'Не отвечай «всё будет хорошо», если ей плохо. Скажи: «Похоже, сегодня очень тяжело».',
+      'Скажи одну конкретную вещь: «Я вижу, сколько сил ты вложила сегодня».',
+      'Когда она плачет или злится — не чини логикой. Просто будь рядом.',
+      'Обними крепко на 20 секунд без всякого подтекста. Это физически снижает стресс.',
+    ]},
+    {title:'Своя зона заботы о ребёнке',color:'#4A7FA5',cards:[
+      'Возьми один вечерний блок полностью: подготовь, проведи и убери после.',
+      'Узнай сам расписание ближайшего занятия и организуй дорогу.',
+      'Проведи с ребёнком время без развивающей цели, чтобы мама не была «дежурным взрослым».',
+      'Не спрашивай каждые 5 минут, что делать. Сначала посмотри, что нужно.',
+      'Придумай свою, только твою с ребёнком игру на 15 минут, куда мама не вмешивается.',
+    ]},
+    {title:'Быт и невидимая нагрузка',color:'#5A9B87',cards:[
+      'Выбери одну повторяющуюся бытовую задачу и возьми её на себя на месяц. Полностью.',
+      'Проверь запасы еды, лекарств, нужных вещей — без напоминания.',
+      'Запиши ребёнка к врачу сам: от поиска телефона до подтверждения.',
+      'Если видишь завал — разбери, не дожидаясь просьбы.',
+      'Спроси: «Какую часть я могу полностью забрать?» — не «чем помочь?».',
+    ]},
+    {title:'Партнёрство и участие',color:'#C4892A',cards:[
+      'Прочитай одну заметку или видео про особенности ребёнка. Будь в теме на равных.',
+      'Задай специалисту один вопрос от себя.',
+      'Запиши сам одну «победу» или изменение ребёнка, которое заметил.',
+      'Организуйте 20 минут только для вас двоих. Даже чай на кухне, когда ребёнок уснул.',
+      'Поговорите 10 минут не о ребёнке. Вспомните, что вам нравилось до всей нагрузки.',
+    ]},
+    {title:'Как не усугублять',color:'#C0603A',cards:[
+      'Избегай фраз «другие справляются», «меньше нервничай», «ты зациклена». Они ранят.',
+      'Не знаешь, что сказать — скажи: «Мне сложно понять до конца, но я хочу быть рядом».',
+      'Не обесценивай усталость словами «ты же весь день дома». Уход — это работа без выходных.',
+      'Не жди, что мама «сама попросит». Часто у неё нет сил даже сформулировать просьбу — предложи сам.',
+      'Не сравнивай вашего ребёнка с другими детьми. Это ранит обоих родителей.',
+    ]},
+  ],
+  modules:[
+    {id:'sense',name:'[Sense]',sub:'Сенсорная интеграция',color:'#5A9B87',ctaLink:'https://t.me/Baggi_S',
+     cards:['Перекатывание тактильного мяча по руке. Медленно, 30 секунд на каждую.','Игра с крупой: зарой маленькие игрушки в гречку, найди руками.','Хождение босиком по разным поверхностям: ковёр, плитка, трава.']},
+    {id:'move',name:'[Move]',sub:'Развитие моторики',color:'#2C4068',ctaLink:'https://t.me/Baggi_S',
+     cards:['Перекладывание помпонов пинцетом из миски в коробку. 10 штук.','Лепка колбасок из пластилина — развивает щипковый захват.','Нанизывание крупных бусин на шнурок.']},
+    {id:'speech',name:'[Speech]',sub:'Развитие речи',color:'#7B6BAE',ctaLink:'https://t.me/Baggi_S',
+     cards:['Пение звука «а-а-а» с паузой — жди реакции ребёнка.','Игра с зеркалом: преувеличивай движения губ, указывай на них.','Дуй на перышко произнося «фу-у-у». Показывай ребёнку.']},
+  ],
+  cats:[
+    {id:'mind',label:'Мысли',color:'#7B6BAE',bg:'#F0EDF8',cards:[
+      'Твоя усталость — не слабость. Это доказательство, сколько сил и любви ты отдаёшь.',
+      'Раздражение — нормальная реакция на ненормальную нагрузку. Ты имеешь на него право.',
+      'Запиши одну тревожную мысль о будущем. Рядом честно: это факт или страх?',
+      'Сегодня можно не знать ответов. Просто быть рядом — уже достаточно.',
+      'Позволь себе 5 минут погрустить. Не прогоняй эмоцию, побудь с ней.',
+      'Что бы ты сказала лучшей подруге на твоём месте? Скажи это себе вслух.',
+      'Скажи себе: «Я делаю всё, что в моих силах, из тех ресурсов, что есть сегодня».',
+      '«Я учусь на ходу. Это нормально». Тебе не выдавали инструкцию к этой жизни.',
+      'Запиши, в чём ребёнок изменился за месяц — даже если изменение крошечное.',
+      'Запиши один страх и рядом — шаг, который ты сделала несмотря на него.',
+      'Ты не обязана понимать все диагнозы и термины сейчас. Достаточно одного следующего шага.',
+      'Если хочется плакать — плачь. Слёзы физически выводят напряжение.',
+      'Когда накрывает вина — положи руку на грудь и скажи: «Я делаю то, что могу».',
+      'Ты имеешь право скучать по «обычной» жизни. Это не предательство ребёнка.',
+      'Ты не обязана быть благодарной за «уроки». Можно просто выдерживать.',
+      'Заметь одну мысль, которая крутится по кругу. Запиши её и отложи лист.',
+      'Сегодня можно не «работать над собой». Можно просто дожить до вечера.',
+      'Вспомни, как ты справилась с чем-то трудным полгода назад. Ты уже не там.',
+      'Разреши себе сегодня не быть сильной. Признать, что тяжело — это тоже сила.',
+      'За что ты уважаешь себя как маму прямо сейчас? Назови хотя бы одно.',
+      'Ты меняешься вместе с ребёнком. Запиши одно изменение в себе за эти месяцы.',
+      'Сегодня можно не искать смысл в происходящем. Достаточно просто быть здесь.',
+      'Что бы ты сказала себе в самом начале этого пути? Скажи это себе сегодня.',
+      'Одна мысль сегодня необязательна к решению. Отметь её как «подумаю завтра».',
+      'Ты уже прошла через то, что когда-то казалось невозможным.',
+    ]},
+    {id:'self',label:'Забота',color:'#E8956D',bg:'#FBF0E8',cards:[
+      'Выпей стакан воды. Прямо сейчас, до следующего дела.',
+      'Три медленных вдоха, ноги на полу. Ты здесь.',
+      '10–15 минут без телефона. Просто лечь или сесть. Это восстановление, не лень.',
+      'Съешь что-нибудь сидя. Не стоя и не на бегу.',
+      'Выйди на воздух на 7–10 минут. Даже просто постоять у подъезда.',
+      'Самомассаж шеи и плеч — 90 секунд. Можно прямо сейчас.',
+      'Умойся прохладной или тёплой водой. Маленький возврат к себе.',
+      'Положи одну руку на живот, другую на грудь. Подыши так 5 циклов.',
+      'Позволь себе сказать «нет» одному человеку или делу сегодня.',
+      'Ляг спать на 20–30 минут раньше. Не получится — тоже нормально.',
+      'Сделай глоток горячего чая или кофе. 10 секунд только на вкус и тепло.',
+      'Надень одежду, в которой тебе сегодня мягко и безопасно.',
+      'Признай усталость до того, как она станет срывом. Отмени, что можно отменить.',
+      'Сегодня можно позаботиться о себе «на минималках». Это всё равно забота.',
+      'Твоё тело не обязано быть «в форме». Оно уже несёт огромную нагрузку.',
+      'Выбери один приятный запах (крем, чай, мыло). Понюхай осознанно 20 секунд.',
+      'Сними обувь, распусти волосы, расстегни тесное — если тело просит свободы.',
+      'Если есть возможность — 3 минуты под тёплым душем без цели «помыться быстро».',
+      'Поставь любимую песню и просто послушай её от начала до конца.',
+      'Запланируй один момент только для тебя на завтра — даже 10 минут.',
+      'Что твоё тело просит прямо сейчас? Сделай одно маленькое движение навстречу.',
+      'Сделай одно очень маленькое приятное действие только потому, что тебе хочется.',
+      'Напиши одно дело, которое сегодня можно сделать не идеально.',
+      'Если сегодня совсем нет сил на заботу — просто признай это. Признание тоже считается.',
+      'Когда ты последний раз смеялась без напряжения? Просто вспомни этот момент.',
+    ]},
+    {id:'family',label:'Близкие',color:'#4A7FA5',bg:'#EAF2FA',cards:[
+      'Попроси кого-то о конкретной маленькой помощи сегодня.',
+      'Скажи близкому одну конкретную вещь, которая тебе нужна (объятие, тишина, помощь).',
+      'Разреши другим участвовать в уходе — даже если «не так, как ты».',
+      '10–15 минут рядом с ребёнком без занятий и целей. Просто быть.',
+      'Запиши момент недели, когда ребёнок тебя удивил или растрогал.',
+      'Если чей-то совет ранит — ты имеешь право вежливо, но твёрдо его остановить.',
+      'Найди маму в похожей ситуации — напиши коротко или просто почитай чужой опыт.',
+      'Позвони близкому не по делу, а ради звука его голоса.',
+      'Ты не обязана объяснять диагноз и нагрузку каждому, кто спрашивает.',
+      'Если устала — скажи ребёнку прямо: «Мама устала, мне нужен отдых». Это учит эмпатии.',
+      'Сделай фото ребёнка сегодня. Не для отчёта — для себя.',
+      'Семейный перекус или чай без телефонов. Хотя бы 15 минут вместе.',
+      'Если партнёр не понимает — это больно. Ты имеешь право на эту боль.',
+      'Если чувствуешь одиночество даже рядом с людьми — назови его вслух или на бумаге.',
+      'Ты имеешь право на отношения, где видят и тебя — не только ребёнка.',
+      'Напиши близкому одно конкретное «спасибо» за что-то реальное.',
+      'Попроси партнёра или близкого взять на себя одно дело на этой неделе полностью.',
+      'Расскажи ребёнку одну простую вещь о себе. Он тоже хочет тебя знать.',
+      'Вспомни человека, рядом с которым тебе чуть легче. Напиши ему два слова.',
+      'Сегодня можно не быть «удобной» и «понимающей» для всех.',
+      'Разреши себе не отчитываться близким о состоянии ребёнка каждый раз.',
+      'Напиши одну фразу, которую тебе важно услышать. Можно показать её близким.',
+      'Если сорвалась на близких — извинись, прости себя и иди дальше. Завтра новый день.',
+      'Поблагодари того, кто сегодня сделал твой день чуть легче. Даже если это ты сама.',
+      'Дети чувствуют наше состояние. Сказать «мама устала» — честно и нормально.',
+    ]},
+    {id:'growth',label:'Моя жизнь',color:'#5A9B87',bg:'#EAF5F1',cards:[
+      'Ты уже эксперт по своему ребёнку. Это тоже рост.',
+      'Запиши одну вещь, которую научилась делать за год, хотя думала, что не сможешь.',
+      'Сегодня можно не развиваться. Можно просто выдержать день. Это тоже навык.',
+      'Выбери одну вещь, которая принадлежит только тебе: музыка, напиток, маршрут.',
+      'Вспомни, что занимало тебя до постоянного ухода. Не возвращай сразу — просто назови.',
+      'Запиши не достижение, а то, что ты выдержала за последний месяц.',
+      'Какое твоё качество усилилось за время особого родительства?',
+      'Сегодня можно не становиться «лучшей версией себя». Можно быть настоящей.',
+      'Что ты больше не готова терпеть? Это тоже признак роста.',
+      'Напиши одну мечту — про себя, не про ребёнка. Даже если «невовремя».',
+      'Ты имеешь право меняться медленно. Рост не обязан быть быстрым и заметным.',
+      'Представь не идеальное будущее, а обычный хороший час. Где ты и что в нём?',
+      'Сегодня можно не читать о диагнозе. Незнание всего не делает тебя плохой мамой.',
+      'Ты уже эксперт по выживанию, о котором большинство даже не догадывается.',
+      'Рост иногда выглядит как «я просто продолжаю». И этого достаточно.',
+      'Выбери одну вещь только для тебя: музыка, напиток, маршрут. Ничего не объясняй.',
+      'Какой навык выживания ты уже освоила на отлично? (терпение, организация, поиск информации)',
+      'Ты имеешь право сказать на сложный вопрос: «Я не знаю, подумаю завтра».',
+      'Запиши один вопрос, на который ты уже нашла свой ответ — не чужой.',
+      'Оставь сегодня 10 минут, в которых нет вообще никакого плана.',
+      'Посмотри на себя год назад. Что бы ты ей сказала с теплом?',
+      'Ты выросла в умении просить и принимать помощь — даже если просишь всё ещё редко.',
+      'Вспомни, кем ты была до постоянного ухода. Эта женщина не исчезла, она здесь.',
+      'Кто ты, кроме мамы и организатора реабилитации? Назови часть себя, которая только твоя.',
+      'Ты имеешь право горевать о той жизни и той себе, которых представляла раньше.',
+    ]},
+    {id:'plan',label:'Дела',color:'#1B2A4A',bg:'#E8EDF5',cards:[
+      'Выбери одно дело из списка на сегодня и убери его. Не перенеси — убери.',
+      'Напиши специалисту только один вопрос. Не составляй идеальное сообщение.',
+      'Один админ-вопрос, который висит. Сделай только первый крошечный шаг.',
+      'Передай другому взрослому конкретную задачу: запись, покупка, дорога или звонок.',
+      'Список дел на неделю — не больше 4–5. Остальное — «если останутся силы».',
+      'Поставь таймер на 15 минут, разбери один маленький завал. Таймер кончился — стоп.',
+      'Антихаос-рутина: 3 действия для тела, когда всё рушится (вода, окно, сесть).',
+      'Документы или справки с истекающим сроком? Поставь одно напоминание.',
+      'Если задача вызывает сопротивление — спроси: «Это правда моя ответственность сейчас?»',
+      'После админ-дела запланируй 5 минут без следующей задачи.',
+      'Разреши себе сделать что-то «достаточно хорошо», а не идеально.',
+      'Ты не обязана успевать всё. Один закрытый вопрос — уже движение.',
+      'Если сегодня ничего не сделано — это данные о нагрузке, а не приговор тебе.',
+      'Беспорядок дома при такой нагрузке — норма. Разреши вещам лежать не на местах.',
+      'Если есть силы на ребёнка — возьми одну карточку LOLA на 5 минут. Только одну.',
+      'Напиши все дела, которые ты уже сделала с утра. Ты удивишься объёму.',
+      'Какие дела сегодня можно делать сидя или лёжа? Переведи всё возможное в лёгкий режим.',
+      'Вспомни дело, которое откладываешь месяц. Отложи его официально ещё на неделю, без вины.',
+      'Правило 5 минут: сделай только то, что займёт ровно 5 минут. Остальное подождёт.',
+      'Твоя главная задача сегодня — сохранить себя, а не идеальное расписание.',
+      'Если список дел вызывает панику — оставь только то, что связано с безопасностью или сроком.',
+      'Разбей одно пугающее дело на самый первый крошечный шаг. Больше ничего не делай.',
+      'Кому или чему ты можешь сегодня сказать твёрдое «нет», чтобы освободить время?',
+      'Выбери одно дело, которое можно сделать вместе с ребёнком или фоном, и сделай только его.',
+      'Ты — человек, а не функция. Один закрытый вопрос сегодня — уже достаточно.',
+    ]},
+    {id:'budget',label:'Бюджет',color:'#C4892A',bg:'#FBF3E8',cards:[
+      'Злиться, что реабилитация стоит дорого — нормально. Признай эту эмоцию.',
+      'Запиши только один расход, который сильнее всего тревожит. Не считай весь месяц.',
+      'Сколько потратила на себя на неделе? Если почти ноль — просто заметь.',
+      'Расходы на здоровье ребёнка — суровая данность, а не твоя вина.',
+      'Финансовая тревога высасывает силы. Сегодня можно не думать о бюджете.',
+      'Есть платёж, который можно перенести, разбить или обсудить? Проверь.',
+      'Оплати один самый мелкий счёт сейчас, чтобы перестал фонить в голове.',
+      'Не сравнивай свои возможности с другими семьями. Твоя ситуация уникальна.',
+      'Отдели «деньги на выживание и реабилитацию» от «я плохо управляю финансами».',
+      'Если разговор о деньгах небезопасен — не начинай его сегодня. Сначала найди, к кому обратиться.',
+      'Напиши одну «хотелку» для себя. Даже если сейчас на неё нет денег.',
+      'Ты справляешься с финансовой нагрузкой, которую большинство даже не представляет. Факт.',
+      'Составь вопрос о стоимости помощи. Ясность — это не требование сейчас же найти деньги.',
+      'После финансового дела запланируй 5 минут без следующей задачи.',
+      'Отпишись сегодня от одного платного сервиса или рассылки, которыми не пользуешься.',
+      'Посчитай не траты, а сколько ты сэкономила семье своей ежедневной работой по уходу.',
+      'Отложи любую, даже символическую сумму. Это не про богатство — про чувство контроля.',
+      'Откажись принимать любое сложное финансовое решение сегодня. Утро вечера мудренее.',
+      'Если была крупная импульсивная трата — прости себя. Иногда мы покупаем, чтобы почувствовать себя живыми.',
+      'Вспомни человека или организацию, которые когда-либо вам помогли. Поблагодари мысленно.',
+      'Финансовая тревога высасывает силы. Сегодня разрешаю себе не думать о деньгах вообще.',
+      'Ты не виновата, что помощь ребёнку стоит дорого. Система дорогая, а не ты «плохо считаешь».',
+      'Отдели «денег объективно мало» от «я плохо управляю». Это разное, и первое — не твоя вина.',
+      'Если решения о деньгах принимаешь не ты и это небезопасно — не начинай разговор сегодня.',
+      'Ты справляешься с финансовой нагрузкой, которую большинство даже не представляет. Это факт.',
+    ]},
+  ],
+  oporCards:[
+    'Сегодня можно ничего не успеть. Мир не рухнет.',
+    'Ты уже сделала достаточно. Даже если кажется, что нет.',
+    'Ты не обязана быть в ресурсе каждый день.',
+    'Можно отменить планы, если сил нет. Это не слабость.',
+    'Плакать — не провал. Это способ сбросить давление.',
+    'Твоё «я устала» имеет право звучать вслух.',
+    'Ты не обязана улыбаться, когда внутри тяжело.',
+    'Просить помощи — это забота, а не предательство.',
+    'Идеальной мамы не существует. И не существовало.',
+    'Даже плохой день не делает тебя плохой мамой.',
+    'Поставь ноги на пол. Ты здесь.',
+    'Сделай один медленный вдох. Этого достаточно.',
+    'Оглянись. Назови три вещи, которые видишь.',
+    'Твоё тело знает, когда пора остановиться.',
+    'Даже лёжа и дыша, ты продолжаешь заботиться.',
+    'Сейчас не нужно решать всё. Достаточно быть здесь.',
+    'Тишина — тоже форма поддержки.',
+    'Твоё состояние влияет сильнее, чем идеальные методики.',
+    'Ребёнку важна не идеальная мама, а живая.',
+    'Быть рядом иногда важнее, чем делать правильно.',
+    'Даже если сегодня не было развития, была связь.',
+    'Забота о себе — это вклад в ребёнка.',
+    'Ты не обязана тащить всё одна.',
+    'Сегодняшний день можно просто пережить.',
+    'Просто быть рядом, даже выжатой — уже огромный подвиг.',
+  ],
+  silaCards:[
+    'Ты уже прошла через то, что казалось невозможным.',
+    'Посмотри назад — сколько ты уже прошла.',
+    'Твой труд не напрасен. Даже если результата не видно — он есть.',
+    'Каждый день, когда ты встаёшь и продолжаешь — это победа.',
+    'Ты движешься вперёд. Даже маленькие шаги — это вперёд.',
+    'Поплачь, если нужно. А потом встань — ты умеешь.',
+    'Ты не сдашься. Не потому что обязана — потому что любишь.',
+    'Твой ребёнок нуждается в тебе — не в идеальной, а в тебе.',
+    'Даже если он не говорит — он чувствует твою любовь.',
+    'Твои объятия — его самое безопасное место.',
+    'Каждый маленький прогресс — ваша общая победа.',
+    'Ты показываешь ему: трудности — не конец.',
+    'Твой ребёнок верит в тебя больше, чем ты сейчас.',
+    'Его прогресс — твоя работа. Не обесценивай.',
+    'Ты — его голос. Борись за него, не замолкай.',
+    'Отчаяние — не правда. Это усталость говорит.',
+    'Сделай один трудный звонок, который откладывала. Сегодня.',
+    'Надежда живёт в тебе — даже когда не видно.',
+    'Мир не против тебя. Путь тяжёлый — это разные вещи.',
+    'Ты воин. Не жертва — воин.',
+    'Найди одного человека, который понимает. Напиши сегодня.',
+    'Похвали себя за что-то конкретное. Вслух.',
+    'Твоя стойкость — это выбор каждый день.',
+    'Ты заслуживаешь поддержки. Попроси — это смелость.',
+    'Ты не обязана справляться красиво.',
+    'Твоя любовь — самое мощное что есть у ребёнка.',
+    'Ты растёшь вместе с ним. Каждый вызов делает сильнее.',
+    'Твоя усталость — след от любви, которую отдаёшь.',
+  ],
+};
+
+// ── KAZAKH ───────────────────────────────────────────────────────
+const KZ = {
+  switchLbl:'ҚАЗ',
+  nav:['Карточкалар','Трекер','Тірек','Әке','Қорытынды'],
+  doneTxt:'✓  Орындадым',
+  oporaTab:'Тірек',
+  mindIntroTitle:'Ананы қолдау',
+  oporaDesc:'Тірек карточкалары — күшің жетпей тұрған күндерге. Бір карточканы оқы, қайтып оралуыңа болады. Ештеңе жасамай-ақ — тек оқу жеткілікті.',
+  silaDesc:'Күш карточкалары — алға бір қадам жасауға кеуіл керек болғанда. Бір ой немесе бір нақты іс-әрекет.',
+  oporaLbl:'Тірек карточкасы',
+  readBtn:'Оқыдым',
+  totalLbl:'карточка орындалды',
+  resetLbl:'Деректерді басқару',
+  resetAll:'Барлық деректерді жою',
+  resetWeekBody:'Трекер, серия және модульдер тазартылды. Карточкалар мен жазбалар сақталды.',
+  resetAllTitle:'Толық тазарту',
+  cancel:'Бас тарту',
+  welcomeTitle:'Ананы қолдау. Күн сайын.',
+  welcomeDesc:'Бұл қолданба ерекше қажеттіліктері бар балалардың аналарына арналған. Балаңа күтім жасай отырып өзіңді жоғалтпауға, әр күні тірек табуға көмектеседі.',
+  welcomeForWhomLbl:'Кім үшін',
+  welcomeInsideLbl:'Ішінде не бар',
+  welcomeTrialLbl:'Тегін — барлық мүмкіндіктер ашық 💛',
+  welcomeCta:'Бастау →',
+  welcomeAuthor:'Автор: Рабига Сагындықова · lola.system',
+  onboardTitle:'Қош келдіңіз',
+  trialInfo:'Тегін. Барлық мүмкіндіктер ашық.',
+  streakLbl:'Апталық серия',
+  startBtn:'Бастау',
+  toastDone:'Тамаша! ✓',
+  lolaCtaInfo:'Жинақ туралы толығырақ',
+  lolaTitle:'LOLA — сабақ карточкалары',
+  lolaExamples:'3 мысал',
+  lolaCtaFull:'Толық жинақты сатып алу →',
+  week:'Апта',
+  welcomeForWhom:[
+    {icon:'💛',text:'ЗПР, ДЦП, аутизм және дамуының ерекшеліктері бар балалардың аналары үшін'},
+    {icon:'📅',text:'Шаршаған, өзінің де, баласының да өсуін көргісі келетіндер үшін'},
+    {icon:'🌿',text:'Қолдау іздеп, күнделікті өмірде қарапайым тірек қалаушылар үшін'},
+  ],
+  welcomeInside:[
+    {icon:'▦',label:'6 тақырып',sub:'Ана үшін жоспарлау карточкалары'},
+    {icon:'✓',label:'Трекер',sub:'Сабақтар мен апталық серия'},
+    {icon:'☺',label:'Тірек + Күш',sub:'25+28 қолдау карточкасы'},
+    {icon:'📖',label:'LOLA',sub:'Баламен сабақ мысалдары'},
+  ],
+  onboardSteps:[
+    {icon:'▦',bg:'#F0EDF8',title:'Жоспарлау карточкалары',desc:'6 тақырып — ойлар, күтім, жақындар, өсу, істер, бюджет. Күнделікті бір карточка тірек береді.'},
+    {icon:'✓',bg:'#EAF5F1',title:'Сабақ трекері',desc:'Баламен жасаған сабақтарыңды белгіле. Жетістіктерді жаз.'},
+    {icon:'☺',bg:'#EAF2FA',title:'Тірек және Күш',desc:'Ана үшін екі жинақ. Тірек — күш жетпегенде. Күш — алға бір қадам керек болғанда.'},
+    {icon:'📖',bg:'#EAF5F1',title:'LOLA карточкалары',desc:'Балаңмен үйде жасауға арналған сабақтар: сенсорика, моторика, сөйлеу.'},
+  ],
+  modeLabels:{red:'Ауыр',yellow:'Аздап күш бар',green:'Ресурс бар'},
+  modeHints:{red:'Бүгін — тек ең жеңіл карточкалар. Басқа ештеңе қажет емес.',yellow:'Жеңілдеу карточкалар, жүктемесіз.',green:'Осы саланың барлық карточкалары.'},
+  thisWeek:'Осы апта',
+  modLbl:'Өзіме қалай қамқор болдым',
+  tapDots:'не болғанын белгіле',
+  notesTitle:'⭐ Менде және балада не сәтті болды',
+  notesAdd:'+ қосу',
+  notePh:'Бүгін сәтті болды...',
+  trackerHelpLbl:'Трекерді қалай қолдану керек',
+  trackerHelp:'<p><b>Апта күндері</b> — өзіңе сәл болса да қамқор бола алған күнді белгіле. Шаршыға бас.</p><p><b>Өзіме қалай қамқор болдым</b> — бүгін не болғанын белгіле: үзіліс, көмек сұрау, жақындардың қатысуы. Бұл тапсырма емес — бар нәрсені жай байқа.</p><p><b>Жазбалар</b> — өзіңде не балада не сәтті болғанын жаз. Міндетсіз, өзің үшін.</p>',
+  victsLbl:'Менің және баланың жеңістері',
+  victEmpty:'Мұнда сенің және баланың кішкентай жеңістерің пайда болады',
+  papaTitle:'Әке немесе жақын ересек үшін',
+  papaSub:'Осы карточкаларды серіктесіңе көрсет. Бұл кінә тағу емес — қасында болу мен жүктемені бөлісу туралы кеңестер.',
+  papaLinkTxt:'Баламен сабаққа арналған LOLA жинақтары →',
+  papaShareBtn:'Әкеге жіберу',
+  papaShareIntro:'Бұл ерекше балалардың аналарына көмектесетін қосымшадан. Онда әкелерге арналған карточкалар бар — кінә емес, қасында қалай болу керегі туралы кеңестер. Бұл — мен туралы, сондықтан бөлісіп отырмын 💛',
+  papaShareSign:'LOLA — аналарға қолдау: t.me/lolasystemcrds_bot',
+  papaShareCopied:'Көшірілді — чатқа қоюға болады ✓',
+  aboutTitle:'Жоба туралы',
+  aboutText:'Бұл — өзім сияқты шаршаған аналарға арналған жоба. Қолдау мен көмекке мұқтаж — өмірдің әртүрлі саласындағы үйінділерді реттеп, оларға сәл тәртіп орнатқысы келетін аналарға. Сен жалғыз емессің.',
+  aboutFbBtn:'💬 Пікір, ұсыныс не қате',
+  aboutFbMsg:'Сәлеметсіз бе! LOLA қосымшасы бойынша пікірім бар: ',
+  aboutSupportTitle:'💛 Жобаны қолдау',
+  aboutSupportText:'Қосымша тегін және солай қала береді. Мүмкіндік пен қалауың болса, қолдасаң — ризамын, бірақ бұл мүлде міндетті емес.\nVisa 4400 4303 6006 3348 (Serik Lakpayev)\nKaspi +7 747 587 9943 (Серик Л.)',
+  days:['Дс','Сс','Ср','Бс','Жм','Сб','Жс'],
+  momState:[
+    {id:'pause',txt:'Өзіме үзіліс жасадым',hint:'бірнеше минут болса да'},
+    {id:'help',txt:'Көмек сұрадым'},
+    {id:'nokick',txt:'Бүгін өзімді жерлемедім'},
+    {id:'adult',txt:'Жақындарымның біреуі күтімнің бір бөлігін алды',hint:'бәрін жалғыз тартпайсың'},
+    {id:'notalone',txt:'Баламен жалғыз емес уақыт өткіздім'},
+  ],
+  papaLink:'https://t.me/Baggi_S',
+  papaGroups:[
+    {title:'Эмоционалды қатысу',color:'#7B6BAE',cards:[
+      'Сұра: «Саған қазір не керек — тыңдағаным ба, шешуге көмектескенім бе, әлде жай қасыңда болғаным ба?»',
+      'Оған ауыр болса, «бәрі жақсы болады» деме. Айт: «Бүгін өте қиын сияқты».',
+      'Бір нақты нәрсе айт: «Бүгін қаншама күш салғаныңды көріп тұрмын».',
+      'Ол жыласа не ашуланса — логикамен «жөндеме». Жай ғана қасында бол.',
+      'Ешқандай астарсыз 20 секунд қатты құшақта. Бұл кернеуді денеден төмендетеді.',
+    ]},
+    {title:'Балаға өз қамқорлық аймағың',color:'#4A7FA5',cards:[
+      'Бір кешкі блокты толық ал: дайында, өткіз және кейін жина.',
+      'Жақын сабақтың кестесін өзің біл де жолды ұйымдастыр.',
+      'Баламен дамыту мақсатынсыз уақыт өткіз, ана «кезекші ересек» болмасын.',
+      'Әр 5 минут сайын не істеу керегін сұрама. Алдымен не керегін өзің қара.',
+      'Баламен өзіңнің, тек өзіңнің 15 минуттық ойыныңды ойлап тап, оған ана араласпасын.',
+    ]},
+    {title:'Тұрмыс пен көрінбейтін жүктеме',color:'#5A9B87',cards:[
+      'Бір қайталанатын тұрмыстық істі таңдап, оны бір айға толық өзіңе ал.',
+      'Тамақ, дәрі, керек заттардың қорын тексер — еске салусыз.',
+      'Баланы дәрігерге өзің жаз: телефон іздеуден растауға дейін.',
+      'Үйінді көрсең — сұрауын күтпей жина.',
+      'Сұра: «Қай бөлігін толық өзіме ала аламын?» — «немен көмектесейін?» емес.',
+    ]},
+    {title:'Серіктестік пен қатысу',color:'#C4892A',cards:[
+      'Баланың ерекшелігі туралы бір мақала не бейне оқы. Теңдей хабардар бол.',
+      'Маманға өзіңнен бір сұрақ қой.',
+      'Баланың байқаған бір «жетістігін» не өзгерісін өзің жаз.',
+      'Тек екеуіңе ғана 20 минут ұйымдастыр. Бала ұйықтағанда асханадағы шай да болады.',
+      '10 минут бала туралы емес сөйлес. Осы жүктемеге дейін нені ұнататыныңды есіңе түсір.',
+    ]},
+    {title:'Қалай нашарлатпау керек',color:'#C0603A',cards:[
+      '«Басқалар шыдап жүр», «аз күйзел», «сен шектеніп қалдың» деген сөздерден аулақ бол. Олар жаралайды.',
+      'Не айтарыңды білмесең — айт: «Толық түсіну маған қиын, бірақ мен қасыңда болғым келеді».',
+      '«Күні бойы үйдесің ғой» деп шаршағанын құнсыздандырма. Күтім — демалыссыз жұмыс.',
+      'Ана «өзі сұрайды» деп күтпе. Көбіне оның сұрауды құрастыруға да күші жоқ — өзің ұсын.',
+      'Балаңды басқа балалармен салыстырма. Бұл екі ата-ананы да жаралайды.',
+    ]},
+  ],
+  cats:[
+    {id:'mind',label:'Ойлар',color:'#7B6BAE',bg:'#F0EDF8',cards:[
+      'Шаршағаның — әлсіздік емес. Бұл сенің қаншалықты күш пен махаббат сыйлайтыныңның дәлелі.',
+      'Ашулану — қалыпты емес жүктемеге қалыпты жауап. Оған құқығың бар.',
+      'Болашақ туралы бір мазасыз ойды жаз. Қасына адал жаз: бұл шындық па, әлде қорқыныш па?',
+      'Бүгін жауаптарды білмесең де болады. Жай ғана қасында болу — жеткілікті.',
+      'Өзіңе 5 минут мұңаюға рұқсат бер. Эмоцияны қумай, онымен бірге бол.',
+      'Сенің орныңдағы жақын құрбыңа не айтар едің? Соны өзіңе дауыстап айт.',
+      'Өзіңе айт: «Мен бүгінгі ресурсыммен қолымнан келгеннің бәрін істеп жатырмын».',
+      '«Мен жүре келе үйреніп жатырмын. Бұл қалыпты». Бұл өмірге нұсқаулық берілмеген.',
+      'Баланың бір айда неде өзгергенін жаз — тіпті кішкентай өзгеріс болса да.',
+      'Бір қорқынышты жаз, қасына — соған қарамай жасаған қадамыңды.',
+      'Барлық диагноз бен терминді қазір түсінуге міндетті емессің. Бір келесі қадам жеткілікті.',
+      'Жылағың келсе — жыла. Көзжас кернеуді денеден шығарады.',
+      'Кінә басып бара жатса — қолыңды кеудеңе қой да айт: «Мен қолымнан келгенін істеп жатырмын».',
+      '«Кәдімгі» өмірді сағынуға құқығың бар. Бұл балаға опасыздық емес.',
+      '«Сабақтар» үшін алғысты болуға міндетті емессің. Жай ғана шыдасаң да болады.',
+      'Айналып жүрген бір ойды байқа. Оны жаз да, парақты қой.',
+      'Бүгін «өзіңмен жұмыс істемесең» де болады. Кешке дейін жету — жеткілікті.',
+      'Жарты жыл бұрын қиын нәрсені қалай жеңгеніңді есіңе түсір. Сен енді ол жерде емессің.',
+      'Бүгін күшті болмауға рұқсат бер. Қиын екенін мойындау — бұл да күш.',
+      'Дәл қазір ана ретінде өзіңді не үшін сыйлайсың? Кемінде бір нәрсені ата.',
+      'Сен баламен бірге өзгеріп келесің. Осы айларда өзіңдегі бір өзгерісті жаз.',
+      'Бүгін болып жатқанның мәнін іздемесең де болады. Жай ғана осында болу — жеткілікті.',
+      'Осы жолдың басында өзіңе не айтар едің? Соны бүгін өзіңе айт.',
+      'Бүгінгі бір ой міндетті түрде шешілуі шарт емес. Оны «ертең ойланам» деп белгіле.',
+      'Сен бір кездері мүмкін емес көрінген нәрседен өтіп кеттің.',
+    ]},
+    {id:'self',label:'Қамқорлық',color:'#E8956D',bg:'#FBF0E8',cards:[
+      'Бір стакан су іш. Дәл қазір, келесі істен бұрын.',
+      'Үш баяу дем ал, аяғың еденде. Сен осындасың.',
+      '10–15 минут телефонсыз. Жай ғана жат немесе отыр. Бұл қалпына келу, жалқаулық емес.',
+      'Бір нәрсені отырып же. Тұрып емес, жүгіріп емес.',
+      '7–10 минут ауаға шық. Тіпті подъезд алдында тұрсаң да.',
+      'Мойын мен иықты өзің уқала — 90 секунд. Дәл қазір болады.',
+      'Салқын не жылы сумен жуын. Өзіңе оралудың кішкентай сәті.',
+      'Бір қолыңды ішіңе, екіншісін кеудеңе қой. Осылай 5 рет дем ал.',
+      'Бүгін бір адамға не іске «жоқ» деуге рұқсат бер.',
+      '20–30 минут ерте жат. Болмаса — ол да қалыпты.',
+      'Ыстық шай не кофеден бір ұрттам ал. 10 секунд тек дәмі мен жылуына.',
+      'Бүгін өзіңе жұмсақ әрі қауіпсіз киім ки.',
+      'Шаршағаныңды бұзылысқа айналмай тұрып мойында. Болдырмайтынды болдырма.',
+      'Бүгін өзіңе «ең азымен» қамқор болуға болады. Бұл бәрібір қамқорлық.',
+      'Денең «формада» болуға міндетті емес. Ол қазірдің өзінде үлкен жүкті көтеріп жүр.',
+      'Бір жағымды иісті таңда (крем, шай, сабын). 20 секунд саналы иіскеп көр.',
+      'Аяқ киіміңді шеш, шашыңды жай, қыспа киімді боста — денең еркіндік сұраса.',
+      'Мүмкіндік болса — 3 минут жылы душтың астында «тез жуыну» мақсатынсыз.',
+      'Сүйікті әніңді қой да оны басынан аяғына дейін жай ғана тыңда.',
+      'Ертеңге тек өзіңе арналған бір сәтті жоспарла — тіпті 10 минут.',
+      'Денең дәл қазір нені сұрап тұр? Соған қарай бір кішкентай қадам жаса.',
+      'Тек қалағаның үшін бір кішкентай жағымды әрекет жаса.',
+      'Бүгін мінсіз емес, жай істеуге болатын бір істі жаз.',
+      'Бүгін қамқорлыққа мүлде күш болмаса — оны жай ғана мойында. Мойындау да есептеледі.',
+      'Соңғы рет қашан кернеусіз күлдің? Сол сәтті есіңе түсір.',
+    ]},
+    {id:'family',label:'Жақындар',color:'#4A7FA5',bg:'#EAF2FA',cards:[
+      'Бүгін біреуден нақты кішкентай көмек сұра.',
+      'Жақыныңа саған керек бір нақты нәрсені айт (құшақтау, тыныштық, көмек).',
+      'Басқаларға күтімге қатысуға рұқсат бер — «сен қалағандай емес» болса да.',
+      'Баламен 10–15 минут сабақсыз, мақсатсыз бол. Жай ғана бірге.',
+      'Осы аптада баланың сені таңғалдырған не толқытқан сәтін жаз.',
+      'Біреудің кеңесі жараласа — оны сыпайы, бірақ нық тоқтатуға құқығың бар.',
+      'Ұқсас жағдайдағы ананы тап — қысқа жаз немесе біреудің тәжірибесін оқы.',
+      'Жақыныңа іс үшін емес, дауысын есту үшін қоңырау шал.',
+      'Диагноз бен жүктемені сұраған әркімге түсіндіруге міндетті емессің.',
+      'Шаршасаң — балаға тіке айт: «Анаң шаршады, маған демалу керек». Бұл эмпатияға үйретеді.',
+      'Бүгін баланың суретін түсір. Есеп үшін емес — өзің үшін.',
+      'Телефонсыз отбасылық шай не тамақ. Кемінде 15 минут бірге.',
+      'Серіктес түсінбесе — бұл ауыр. Осы ауырсынуға құқығың бар.',
+      'Адамдардың арасында да жалғыздық сезсең — оны дауыстап не қағазға айт.',
+      'Тек баланы ғана емес, сені де көретін қарым-қатынасқа құқығың бар.',
+      'Жақыныңа нақты бір нәрсе үшін «рахмет» жаз.',
+      'Серіктестен не жақыныңнан осы аптада бір істі толық өзіне алуын сұра.',
+      'Балаға өзің туралы бір қарапайым нәрсе айт. Ол да сені білгісі келеді.',
+      'Қасында саған сәл жеңіл болатын адамды есіңе түсір. Оған екі ауыз сөз жаз.',
+      'Бүгін бәріне «ыңғайлы» әрі «түсінуші» болмауға болады.',
+      'Баланың жағдайын жақындарыңа әр жолы есеп бермеуге рұқсат бер.',
+      'Естігің келетін бір сөзді жаз. Оны жақындарыңа көрсетуге болады.',
+      'Жақындарыңа ашуланып қалсаң — кешірім сұра, өзіңді кешір де әрі қарай жүр. Ертең жаңа күн.',
+      'Бүгін күніңді сәл жеңілдеткен адамға алғыс айт. Ол өзің болсаң да.',
+      'Балалар біздің күйімізді сезеді. «Анам шаршады» деу — адал әрі қалыпты.',
+    ]},
+    {id:'growth',label:'Менің өмірім',color:'#5A9B87',bg:'#EAF5F1',cards:[
+      'Сен қазірдің өзінде өз балаңның маманысың. Бұл да өсу.',
+      'Жасай алмаймын деп ойлаған, бірақ бір жылда үйренген бір нәрсені жаз.',
+      'Бүгін дамымасаң да болады. Жай ғана күнді өткізсең де. Бұл да дағды.',
+      'Тек өзіңе тиесілі бір нәрсені таңда: музыка, сусын, маршрут.',
+      'Үздіксіз күтімге дейін сені не қызықтыратынын есіңе түсір. Бірден қайтарма — жай ата.',
+      'Жетістікті емес, соңғы айда неге шыдағаныңды жаз.',
+      'Ерекше ата-аналық кезінде сенің қай қасиетің күшейді?',
+      'Бүгін «өзіңнің ең жақсы нұсқаң» болмауға болады. Шынайы болсаң да болады.',
+      'Ендігі неге шыдамайсың? Бұл да өсудің белгісі.',
+      'Бір арманыңды жаз — бала туралы емес, өзің туралы. «Уақыты емес» болса да.',
+      'Баяу өзгеруге құқығың бар. Өсу жылдам әрі көрінерлік болуға міндетті емес.',
+      'Мінсіз болашақты емес, кәдімгі жақсы бір сағатты елестет. Онда сен қайдасың, не бар?',
+      'Бүгін диагноз туралы оқымасаң да болады. Бәрін білмеу сені жаман ана қылмайды.',
+      'Сен көбі болжамайтын аман қалу тәжірибесінің маманысың.',
+      'Кейде өсу «мен жай ғана жалғастырып жатырмын» сияқты көрінеді. Осы да жеткілікті.',
+      'Тек өзіңе арналған бір нәрсені таңда: музыка, сусын, маршрут. Ешкімге түсіндірме.',
+      'Қандай аман қалу дағдысын жетік меңгердің? (шыдам, ұйымдастыру, ақпарат іздеу)',
+      'Қиын сұраққа «Білмеймін, ертең ойланам» деуге құқығың бар.',
+      'Өзің жауабын тапқан бір сұрақты жаз — біреудікі емес, өзіңдікі.',
+      'Бүгін ешқандай жоспары жоқ 10 минут қалдыр.',
+      'Бір жыл бұрынғы өзіңе қара. Оған жылулықпен не айтар едің?',
+      'Сен көмек сұрап, оны қабылдай білуде өстің — әлі сирек сұрасаң да.',
+      'Үздіксіз күтімге дейін кім болғаныңды есіңе түсір. Ол әйел жоғалған жоқ, ол осында.',
+      'Ана мен оңалту ұйымдастырушысынан басқа сен кімсің? Тек өзіңдік бір бөлігіңді ата.',
+      'Бұрын елестеткен өмір мен өзің үшін қайғыруға құқығың бар.',
+    ]},
+    {id:'plan',label:'Істер',color:'#1B2A4A',bg:'#E8EDF5',cards:[
+      'Бүгінгі тізімнен бір істі таңдап, оны алып таста. Ауыстырма — алып таста.',
+      'Маманға тек бір сұрақ жаз. Мінсіз хабарлама құрастырма.',
+      'Ілініп тұрған бір әкімшілік мәселе. Тек ең кішкентай алғашқы қадамды жаса.',
+      'Басқа ересекке нақты тапсырма бер: жазылу, сатып алу, жол не қоңырау.',
+      'Аптаға істер тізімі — 4–5-тен көп емес. Қалғаны «күш қалса».',
+      '15 минутқа таймер қой, бір кішкентай үйінді жина. Таймер бітті — тоқта.',
+      'Хаосқа қарсы рутина: бәрі құлағанда денеге 3 әрекет (су, терезе, отыру).',
+      'Мерзімі бітіп бара жатқан құжат не анықтама бар ма? Бір еске салғыш қой.',
+      'Тапсырма қарсылық тудырса — сұра: «Бұл шынымен қазір менің жауапкершілігім бе?»',
+      'Әкімшілік істен кейін 5 минут келесі тапсырмасыз жоспарла.',
+      'Бір нәрсені мінсіз емес, «жеткілікті жақсы» істеуге рұқсат бер.',
+      'Бәрін үлгеруге міндетті емессің. Бір жабылған мәселе — бұл қозғалыс.',
+      'Бүгін ештеңе істелмесе — бұл жүктеме туралы дерек, саған үкім емес.',
+      'Мұндай жүктемеде үйдегі ретсіздік — қалыпты. Заттардың орнында болмауына рұқсат бер.',
+      'Балаға күш болса — 5 минутқа бір LOLA карточкасын ал. Тек біреуін.',
+      'Таңнан бері істеп қойған істеріңді жаз. Көлеміне таңғаласың.',
+      'Бүгін қандай істерді отырып не жатып істеуге болады? Мүмкіндіктің бәрін жеңіл режимге ауыстыр.',
+      'Бір ай кейінге қалдырып жүрген істі есіңе түсір. Оны кінәсіз тағы бір аптаға ресми қалдыр.',
+      '5 минут ережесі: тек дәл 5 минут алатынды істе. Қалғаны күтеді.',
+      'Бүгінгі басты міндетің — мінсіз кесте емес, өзіңді сақтау.',
+      'Істер тізімі үрей тудырса — тек қауіпсіздік не мерзімге байланыстысын қалдыр.',
+      'Қорқынышты бір істі ең алғашқы кішкентай қадамға бөл. Басқа ештеңе істеме.',
+      'Бүгін уақыт босату үшін кімге не неге нық «жоқ» дей аласың?',
+      'Баламен бірге не қатар істеуге болатын бір істі таңда да, тек соны істе.',
+      'Сен — адамсың, функция емес. Бүгінгі бір жабылған мәселе — жеткілікті.',
+    ]},
+    {id:'budget',label:'Бюджет',color:'#C4892A',bg:'#FBF3E8',cards:[
+      'Оңалтудың қымбаттығына ашулану — қалыпты. Осы эмоцияны мойында.',
+      'Ең қатты мазалайтын бір шығынды ғана жаз. Бүкіл айды санама.',
+      'Осы аптада өзіңе қанша жұмсадың? Егер шамамен нөл болса — жай байқа.',
+      'Баланың денсаулығына кететін шығын — ащы шындық, сенің кінәң емес.',
+      'Қаржылық үрей күшті сорады. Бүгін бюджет туралы ойламасаң да болады.',
+      'Кейінге қалдыруға, бөлуге не келісуге болатын төлем бар ма? Тексер.',
+      'Басыңда айналып тұрмауы үшін ең кішкентай бір шотты қазір төле.',
+      'Мүмкіндігіңді басқа отбасылармен салыстырма. Сенің жағдайың бірегей.',
+      '«Күнкөріс пен оңалтуға арналған ақшаны» «мен қаржыны нашар басқарам» дегеннен ажырат.',
+      'Ақша туралы әңгіме қауіпсіз болмаса — бүгін оны бастама. Алдымен кімге жүгінуге болатынын тап.',
+      'Өзіңе бір «қалауды» жаз. Оған қазір ақша жоқ болса да.',
+      'Сен көбі елестете де алмайтын қаржылық жүктемені көтеріп жүрсің. Бұл факт.',
+      'Көмектің құны туралы сұрақ құрастыр. Айқындық — қазір ақ ақша табу талабы емес.',
+      'Қаржылық істен кейін 5 минут келесі тапсырмасыз жоспарла.',
+      'Бүгін қолданбайтын бір ақылы қызметтен не таратудан бас тарт.',
+      'Шығынды емес, күнделікті күтіміңмен отбасыға қанша үнемдегеніңді есепте.',
+      'Кез келген, тіпті шағын соманы жина. Бұл байлық емес — бақылау сезімі туралы.',
+      'Бүгін кез келген күрделі қаржы шешімін қабылдаудан бас тарт. Таңертең ақыл кіреді.',
+      'Аптада ірі бір ойланбаған шығын болса — өзіңді кешір. Кейде біз өзімізді тірі сезіну үшін сатып аламыз.',
+      'Бір кездері көмектескен адам не ұйымды есіңе түсір. Ойша алғыс айт.',
+      'Қаржылық үрей күшті сорады. Бүгін ақша туралы мүлде ойламауға өзіме рұқсат етем.',
+      'Балаға көмектің қымбаттығына сен кінәлі емессің. Жүйе қымбат, сен «нашар санайтын» емессің.',
+      '«Ақша объективті аз» дегенді «мен нашар басқарам» дегеннен ажырат. Бұл екі бөлек, біріншісі — кінәң емес.',
+      'Ақша шешімін сен қабылдамасаң және бұл қауіпсіз болмаса — бүгін әңгімені бастама.',
+      'Сен көбі елестете де алмайтын қаржылық жүктемені көтеріп жүрсің. Бұл факт.',
+    ]},
+  ],
+  oporCards:[
+    'Бүгін ештеңе үлгермесең де болады. Әлем құламайды.',
+    'Сен қазірдің өзінде жеткілікті істедің. Олай көрінбесе де.',
+    'Күн сайын ресурста болуға міндетті емессің.',
+    'Күш болмаса, жоспарды болдырмауға болады. Бұл әлсіздік емес.',
+    'Жылау — сәтсіздік емес. Бұл қысымды босату тәсілі.',
+    '«Мен шаршадым» дегенің дауыстап айтылуға құқылы.',
+    'Іште ауыр болғанда күлуге міндетті емессің.',
+    'Көмек сұрау — қамқорлық, опасыздық емес.',
+    'Мінсіз ана болмайды. Болған да емес.',
+    'Жаман күн де сені жаман ана қылмайды.',
+    'Аяғыңды еденге қой. Сен осындасың.',
+    'Бір баяу дем ал. Осы жеткілікті.',
+    'Айналаңа қара. Көріп тұрған үш нәрсені ата.',
+    'Денең қашан тоқтау керегін біледі.',
+    'Жатып, дем алып жатсаң да, сен қамқорлықты жалғастырып жатырсың.',
+    'Қазір бәрін шешу қажет емес. Осында болу жеткілікті.',
+    'Тыныштық — бұл да қолдаудың бір түрі.',
+    'Сенің күйің мінсіз әдістемелерден күштірек әсер етеді.',
+    'Балаға мінсіз ана емес, тірі ана маңызды.',
+    'Кейде қасында болу — дұрыс істеуден маңыздырақ.',
+    'Бүгін даму болмаса да, байланыс болды.',
+    'Өзіңе қамқорлық — балаға қосқан үлес.',
+    'Бәрін жалғыз тартуға міндетті емессің.',
+    'Бүгінгі күнді жай ғана өткізсең де болады.',
+    'Сарқылған күйде де қасында болу — қазірдің өзінде үлкен ерлік.',
+  ],
+  silaCards:[
+    'Сен мүмкін емес көрінген нәрседен өтіп кеттің.',
+    'Артқа қара — қаншама жол жүрдің.',
+    'Еңбегің бекер емес. Нәтиже көрінбесе де — ол бар.',
+    'Тұрып, жалғастырған әр күнің — жеңіс.',
+    'Сен алға жылжып келесің. Кішкентай қадам да — алға.',
+    'Керек болса жыла. Сосын тұр — сен білесің.',
+    'Сен берілмейсің. Міндетті болғаннан емес — сүйгеннен.',
+    'Балаңа сен керексің — мінсіз емес, өзің.',
+    'Ол сөйлемесе де — сенің махаббатыңды сезеді.',
+    'Сенің құшағың — оның ең қауіпсіз орны.',
+    'Әр кішкентай прогресс — сендердің ортақ жеңістерің.',
+    'Сен оған көрсетесің: қиындық — соңы емес.',
+    'Балаң саған қазіргіден де көбірек сенеді.',
+    'Оның прогресі — сенің еңбегің. Құнсыздандырма.',
+    'Сен — оның даусы. Ол үшін күрес, үндемей қалма.',
+    'Түңілу — шындық емес. Бұл шаршау сөйлеп тұр.',
+    'Кейінге қалдырған қиын қоңырауды шал. Бүгін.',
+    'Үміт сенде тұр — көрінбесе де.',
+    'Әлем саған қарсы емес. Жол қиын — бұл екі бөлек нәрсе.',
+    'Сен жауынгерсің. Құрбан емес — жауынгер.',
+    'Түсінетін бір адамды тап. Бүгін жаз.',
+    'Өзіңді нақты бір нәрсе үшін мақта. Дауыстап.',
+    'Сенің төзімің — күн сайынғы таңдау.',
+    'Сен қолдауға лайықсың. Сұра — бұл батылдық.',
+    'Әдемі жеңуге міндетті емессің.',
+    'Сенің махаббатың — балаңдағы ең қуатты нәрсе.',
+    'Сен онымен бірге өсіп келесің. Әр сынақ күштірек қылады.',
+    'Сенің шаршауың — сыйлаған махаббатыңның ізі.',
+  ],
+};;
+
+const EN = {
+  switchLbl:'EN',
+  nav:['Cards','Tracker','Support','Dad','Progress'],
+  doneTxt:'✓  Done',
+  oporaTab:'Rest',
+  mindIntroTitle:'Support for you',
+  oporaDesc:'Rest Cards — for days when you have no energy. Read one card, come back as often as needed.',
+  silaDesc:'Strength Cards — when you need a push forward. One thought or action to get you moving.',
+  oporaLbl:'Rest Card',
+  readBtn:'I read it',
+  totalLbl:'cards completed',
+  resetLbl:'Data management',
+  resetAll:'Full reset all data',
+  resetWeekBody:'Tracker, streak and modules reset. Cards and notes kept.',
+  resetAllTitle:'Full reset',
+  cancel:'Cancel',
+  welcomeTitle:'Support for you. Every day.',
+  welcomeDesc:'This app is built for mothers of children with special needs. It helps you stay grounded while caring for your child — finding your footing every single day.',
+  welcomeForWhomLbl:'Who it is for',
+  welcomeInsideLbl:'What\'s inside',
+  welcomeTrialLbl:'Free — all features unlocked 💛',
+  welcomeCta:'Start →',
+  welcomeAuthor:'Author: Rabiga Sagyndykova · lola.system',
+  trialInfo:'Free. All features unlocked.',
+  streakLbl:'Weekly streak',
+  startBtn:'Start',
+  toastDone:'Well done! ✓',
+  lolaCtaInfo:'Learn more about this set',
+  lolaTitle:'LOLA — activity cards',
+  lolaExamples:'3 examples',
+  lolaCtaFull:'Buy full set →',
+  week:'Week',
+  welcomeForWhom:[
+    {icon:'💛',text:'Mums of children with developmental delays, cerebral palsy, autism and other conditions'},
+    {icon:'📅',text:'Those who are exhausted and want to see progress — their own and their child\'s'},
+    {icon:'🌿',text:'Those looking for support and simple tools for every day'},
+  ],
+  welcomeInside:[
+    {icon:'▦',label:'6 topics',sub:'Planning cards for mum'},
+    {icon:'✓',label:'Tracker',sub:'Sessions and weekly streak'},
+    {icon:'☺',label:'Rest + Strength',sub:'25+28 support cards'},
+    {icon:'📖',label:'LOLA',sub:'Activity examples for your child'},
+  ],
+  modeLabels:{red:'Hard',yellow:'A little energy',green:'I have resource'},
+  modeHints:{red:'Today — only the gentlest cards. Nothing more is needed.',yellow:'Lighter cards, no load.',green:'All cards in this area.'},
+  thisWeek:'This week',
+  modLbl:'How I cared for myself',
+  tapDots:'mark what happened',
+  notesTitle:'⭐ What went well for me and my child',
+  notesAdd:'+ add',
+  notePh:'Today went well...',
+  trackerHelpLbl:'How to use the tracker',
+  trackerHelp:'<p><b>Days of the week</b> — mark a day when you managed to care for yourself even a little. Tap the square.</p><p><b>How I cared for myself</b> — mark what happened today: a pause, asking for help, involvement of loved ones. These aren\'t tasks — just notice what\'s already there.</p><p><b>Notes</b> — write what went well for you or your child. No obligation, just for you.</p>',
+  victsLbl:'My and my child\'s wins',
+  victEmpty:'Your and your child\'s small wins will appear here',
+  papaTitle:'For dad or a close adult',
+  papaSub:'Show these cards to your partner. It\'s not an accusation — they\'re hints on how to be there and share the load.',
+  papaLinkTxt:'LOLA sets for activities with the child →',
+  papaShareBtn:'Share with dad',
+  papaShareIntro:'This is from an app that helps moms of children with special needs. It has cards for dads — not a reproach, but hints on how to be there. This one is about me, so I\'m sharing 💛',
+  papaShareSign:'LOLA — support for moms: t.me/lolasystemcrds_bot',
+  papaShareCopied:'Copied — you can paste it into the chat ✓',
+  aboutTitle:'About the project',
+  aboutText:'This is a project for moms as tired as I am. Moms who need support and help — to clear the pile-ups across different areas of life and bring a little order to them. You are not alone.',
+  aboutFbBtn:'💬 Feedback, idea or bug',
+  aboutFbMsg:'Hello! I have some feedback on the LOLA app: ',
+  aboutSupportTitle:'💛 Support the project',
+  aboutSupportText:'The app is free and will stay that way. If you have the means and the wish to support it — I\'d be grateful, but it\'s absolutely not required.\nVisa 4400 4303 6006 3348 (Serik Lakpayev)\nKaspi +7 747 587 9943 (Serik L.)',
+  days:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+  momState:[
+    {id:'pause',txt:'I took a pause for myself',hint:'even a few minutes'},
+    {id:'help',txt:'I asked for help'},
+    {id:'nokick',txt:'I didn\'t beat myself up today'},
+    {id:'adult',txt:'Someone close took part of the caregiving',hint:'you\'re not carrying it alone'},
+    {id:'notalone',txt:'I spent time not alone with the child'},
+  ],
+  papaLink:'https://t.me/Baggi_S',
+  papaGroups:[
+    {title:'Emotional presence',color:'#7B6BAE',cards:[
+      'Ask: "Do you need me to listen, help solve it, or just be here right now?"',
+      'Don\'t say "everything will be fine" if she feels bad. Say: "Looks like today is really hard."',
+      'Say one concrete thing: "I see how much you put in today."',
+      'When she cries or is angry — don\'t fix it with logic. Just be there.',
+      'Hold her tight for 20 seconds with no agenda. It physically lowers stress.',
+    ]},
+    {title:'Your own zone of care',color:'#4A7FA5',cards:[
+      'Take one evening block fully: prep it, do it, and clean up after.',
+      'Find out the schedule of the next session yourself and arrange the trip.',
+      'Spend time with the child with no developmental goal, so mom isn\'t the "on-duty adult."',
+      'Don\'t ask what to do every 5 minutes. First look at what\'s needed.',
+      'Invent your own 15-minute game with the child, one mom doesn\'t step into.',
+    ]},
+    {title:'Home and invisible load',color:'#5A9B87',cards:[
+      'Pick one recurring household task and take it on fully for a month.',
+      'Check supplies of food, medicine, needed things — without a reminder.',
+      'Book the child\'s doctor yourself: from finding the number to confirming.',
+      'If you see a pile-up — clear it without waiting to be asked.',
+      'Ask: "Which part can I take off you completely?" — not "how can I help?"',
+    ]},
+    {title:'Partnership and involvement',color:'#C4892A',cards:[
+      'Read one article or video about the child\'s condition. Be equally informed.',
+      'Ask the specialist one question of your own.',
+      'Write down one "win" or change in the child that you noticed yourself.',
+      'Arrange 20 minutes just for the two of you. Even tea in the kitchen once the child\'s asleep.',
+      'Talk for 10 minutes not about the child. Remember what you enjoyed before all the load.',
+    ]},
+    {title:'How not to make it worse',color:'#C0603A',cards:[
+      'Avoid "others cope," "calm down," "you\'re obsessing." They hurt.',
+      'If you don\'t know what to say — say: "It\'s hard for me to fully understand, but I want to be here."',
+      'Don\'t dismiss her tiredness with "you\'re home all day." Caregiving is work with no days off.',
+      'Don\'t wait for mom to "just ask." Often she has no strength even to form the request — offer yourself.',
+      'Don\'t compare your child to other children. It hurts both parents.',
+    ]},
+  ],
+  cats:[
+    {id:'mind',label:'Thoughts',color:'#7B6BAE',bg:'#F0EDF8',cards:[
+      'Your exhaustion isn\'t weakness. It\'s proof of how much strength and love you\'re giving.',
+      'Irritation is a normal reaction to an abnormal load. You have every right to it.',
+      'Write down one anxious thought about the future. Then honestly: is it a fact or a fear?',
+      'It\'s okay not to have the answers today. Just being here is already enough.',
+      'Let yourself grieve for 5 minutes. Don\'t chase the feeling away — sit with it.',
+      'What would you say to your best friend in your place? Say it to yourself out loud.',
+      'Tell yourself: "I\'m doing everything I can with the resources I have today."',
+      '"I\'m learning as I go. That\'s okay." No one handed you a manual for this life.',
+      'Write down one way your child changed this month — even the tiniest change.',
+      'Write one fear, and next to it, a step you took despite it.',
+      'You don\'t have to understand every diagnosis and term right now. One next step is enough.',
+      'If you feel like crying — cry. Tears physically release tension.',
+      'When guilt hits — put a hand on your chest and say: "I\'m doing what I can."',
+      'You have the right to miss your "ordinary" life. That\'s not a betrayal of your child.',
+      'You don\'t have to be grateful for the "lessons." You\'re allowed to just endure.',
+      'Notice one thought going in circles. Write it down and set the paper aside.',
+      'Today you don\'t have to "work on yourself." You can just make it to the evening.',
+      'Remember how you handled something hard six months ago. You\'re not there anymore.',
+      'Let yourself not be strong today. Admitting it\'s hard is its own kind of strength.',
+      'What do you respect about yourself as a mother right now? Name at least one thing.',
+      'You\'re changing along with your child. Write one change in yourself over these months.',
+      'Today you don\'t have to find meaning in what\'s happening. Just being here is enough.',
+      'What would you say to yourself at the very start of this path? Say it to yourself today.',
+      'One thought today doesn\'t have to be resolved. Mark it as "I\'ll think about it tomorrow."',
+      'You\'ve already made it through what once seemed impossible.',
+    ]},
+    {id:'self',label:'Self-care',color:'#E8956D',bg:'#FBF0E8',cards:[
+      'Drink a glass of water. Right now, before the next task.',
+      'Three slow breaths, feet on the floor. You\'re here.',
+      '10–15 minutes without your phone. Just lie down or sit. This is recovery, not laziness.',
+      'Eat something sitting down. Not standing, not on the run.',
+      'Step outside for 7–10 minutes. Even just standing by the door.',
+      'Massage your neck and shoulders yourself — 90 seconds. You can do it right now.',
+      'Wash your face with cool or warm water. A small return to yourself.',
+      'Put one hand on your belly, the other on your chest. Breathe like that for 5 cycles.',
+      'Let yourself say "no" to one person or task today.',
+      'Go to bed 20–30 minutes earlier. If it doesn\'t happen — that\'s okay too.',
+      'Take a sip of hot tea or coffee. 10 seconds just for the taste and warmth.',
+      'Wear something that feels soft and safe to you today.',
+      'Acknowledge the tiredness before it becomes a breakdown. Cancel what can be cancelled.',
+      'Today you can care for yourself "at the minimum." It still counts as care.',
+      'Your body doesn\'t have to be "in shape." It\'s already carrying an enormous load.',
+      'Choose one pleasant smell (cream, tea, soap). Breathe it in mindfully for 20 seconds.',
+      'Take off your shoes, let your hair down, loosen anything tight — if your body wants freedom.',
+      'If you can — 3 minutes under a warm shower with no goal of "washing quickly."',
+      'Put on your favourite song and just listen to it from start to finish.',
+      'Plan one moment just for you tomorrow — even 10 minutes.',
+      'What is your body asking for right now? Take one small step toward it.',
+      'Do one very small pleasant thing just because you want to.',
+      'Write down one thing that can be done imperfectly today.',
+      'If there\'s truly no energy for self-care today — just acknowledge it. Acknowledging counts.',
+      'When did you last laugh without tension? Just remember that moment.',
+    ]},
+    {id:'family',label:'Loved ones',color:'#4A7FA5',bg:'#EAF2FA',cards:[
+      'Ask someone for one specific small favour today.',
+      'Tell someone close one concrete thing you need (a hug, quiet, help).',
+      'Let others take part in the caregiving — even if it\'s "not the way you\'d do it."',
+      'Spend 10–15 minutes with your child with no lessons, no goals. Just being.',
+      'Write down a moment this week when your child surprised or moved you.',
+      'If someone\'s advice hurts — you have the right to stop it, politely but firmly.',
+      'Find a mom in a similar situation — write briefly, or just read someone\'s story.',
+      'Call someone close not about a task, but for the sound of their voice.',
+      'You don\'t owe an explanation of the diagnosis and the load to everyone who asks.',
+      'If you\'re tired — tell your child directly: "Mom is tired, I need rest." It teaches empathy.',
+      'Take a photo of your child today. Not for a report — for yourself.',
+      'A family snack or tea with no phones. At least 15 minutes together.',
+      'If your partner doesn\'t understand — it hurts. You have the right to that pain.',
+      'If you feel lonely even around people — name it out loud or on paper.',
+      'You have the right to a relationship where you\'re seen too — not only the child.',
+      'Write one concrete "thank you" to someone close, for something real.',
+      'Ask your partner or someone close to take on one task this week completely.',
+      'Tell your child one simple thing about yourself. They want to know you too.',
+      'Remember a person you feel a little lighter around. Write them two words.',
+      'Today you don\'t have to be "convenient" and "understanding" for everyone.',
+      'Let yourself not report on your child\'s condition to relatives every time.',
+      'Write one phrase you need to hear. You can show it to those close to you.',
+      'If you snapped at loved ones — apologise, forgive yourself, and move on. Tomorrow is a new day.',
+      'Thank whoever made your day a little easier today. Even if that was you.',
+      'Children feel our state. Saying "Mom is tired" is honest and normal.',
+    ]},
+    {id:'growth',label:'My life',color:'#5A9B87',bg:'#EAF5F1',cards:[
+      'You\'re already an expert on your own child. That\'s growth too.',
+      'Write one thing you learned to do this year, though you thought you couldn\'t.',
+      'Today you don\'t have to grow. Just getting through the day is a skill too.',
+      'Choose one thing that belongs only to you: music, a drink, a route.',
+      'Remember what interested you before the constant caregiving. Don\'t bring it back yet — just name it.',
+      'Write down not an achievement, but what you endured this past month.',
+      'Which of your qualities has grown stronger through special parenting?',
+      'Today you don\'t have to become "the best version of yourself." You can be real.',
+      'What are you no longer willing to put up with? That\'s a sign of growth too.',
+      'Write one dream — about yourself, not your child. Even if it feels "badly timed."',
+      'You have the right to change slowly. Growth doesn\'t have to be fast or visible.',
+      'Picture not a perfect future, but one ordinary good hour. Where are you, what\'s in it?',
+      'Today you don\'t have to read about the diagnosis. Not knowing everything doesn\'t make you a bad mom.',
+      'You\'re already an expert in survival that most people can\'t even imagine.',
+      'Sometimes growth looks like "I\'m just carrying on." And that\'s enough.',
+      'Choose one thing just for you: music, a drink, a route. Don\'t explain it to anyone.',
+      'Which survival skill have you already mastered? (patience, organising, finding information)',
+      'You have the right to answer a hard question with "I don\'t know, I\'ll think tomorrow."',
+      'Write one question you\'ve already found your own answer to — not someone else\'s.',
+      'Leave yourself 10 minutes today with no plan at all.',
+      'Look at yourself a year ago. What would you say to her with warmth?',
+      'You\'ve grown in asking for and accepting help — even if you still ask rarely.',
+      'Remember who you were before the constant caregiving. That woman hasn\'t vanished, she\'s here.',
+      'Who are you besides a mom and a rehab organiser? Name one part of yourself that\'s only yours.',
+      'You have the right to grieve the life and the self you once imagined.',
+    ]},
+    {id:'plan',label:'Tasks',color:'#1B2A4A',bg:'#E8EDF5',cards:[
+      'Pick one task off today\'s list and remove it. Don\'t move it — remove it.',
+      'Write the specialist just one question. Don\'t craft the perfect message.',
+      'One admin issue that\'s hanging over you. Take only the tiniest first step.',
+      'Hand another adult a concrete task: a booking, a purchase, a trip, or a call.',
+      'A to-do list for the week — no more than 4–5. The rest is "if there\'s energy left."',
+      'Set a 15-minute timer, clear one small pile. Timer\'s up — stop.',
+      'Anti-chaos routine: 3 actions for the body when everything falls apart (water, window, sit).',
+      'Any documents or forms about to expire? Set one reminder.',
+      'If a task brings resistance — ask: "Is this really my responsibility right now?"',
+      'After an admin task, plan 5 minutes with no next task.',
+      'Let yourself do something "good enough" instead of perfect.',
+      'You don\'t have to get everything done. One closed issue is already movement.',
+      'If nothing got done today — that\'s data about the load, not a verdict on you.',
+      'Mess at home under this load is normal. Let things lie out of place.',
+      'If you have energy for your child — take one LOLA card for 5 minutes. Just one.',
+      'Write down all the things you\'ve already done since morning. You\'ll be surprised by the amount.',
+      'What can be done sitting or lying down today? Shift everything possible into low-energy mode.',
+      'Remember a task you\'ve put off for a month. Officially postpone it another week, guilt-free.',
+      'The 5-minute rule: do only what takes exactly 5 minutes. The rest can wait.',
+      'Your main task today is to preserve yourself, not a perfect schedule.',
+      'If the to-do list brings panic — keep only what\'s tied to safety or a deadline.',
+      'Break one scary task into the very first tiny step. Do nothing else.',
+      'Who or what can you say a firm "no" to today, to free up time?',
+      'Choose one task you can do together with your child or in the background, and do only that.',
+      'You\'re a person, not a function. One closed issue today is enough.',
+    ]},
+    {id:'budget',label:'Budget',color:'#C4892A',bg:'#FBF3E8',cards:[
+      'Being angry that rehab is expensive is normal. Acknowledge the emotion.',
+      'Write down just one expense that worries you most. Don\'t count the whole month.',
+      'How much did you spend on yourself this week? If it\'s near zero — just notice.',
+      'Spending on your child\'s health is a harsh reality, not your fault.',
+      'Financial anxiety drains a lot of energy. Today you can not think about the budget.',
+      'Is there a payment you can postpone, split, or negotiate? Check.',
+      'Pay one smallest bill now, so it stops buzzing in your head.',
+      'Don\'t compare your means to other families\'. Your situation is unique.',
+      'Separate "money for survival and rehab" from "I\'m bad with finances."',
+      'If a conversation about money isn\'t safe — don\'t start it today. First find someone to turn to.',
+      'Write down one "want" for yourself. Even if there\'s no money for it right now.',
+      'You\'re handling a financial load most people can\'t even imagine. That\'s a fact.',
+      'Draft a question about the cost of help. Clarity isn\'t a demand to find money right now.',
+      'After a financial task, plan 5 minutes with no next task.',
+      'Unsubscribe today from one paid service or mailing you don\'t use.',
+      'Count not the spending, but how much you\'ve saved the family with your daily caregiving.',
+      'Set aside any amount, even symbolic. It\'s not about wealth — it\'s about a sense of control.',
+      'Refuse to make any complex financial decision today. Morning is wiser than evening.',
+      'If there was one big impulsive purchase this week — forgive yourself. Sometimes we buy to feel alive.',
+      'Remember a person or organisation that once helped you. Thank them in your mind.',
+      'Financial anxiety drains a lot of energy. Today I give myself permission not to think about money at all.',
+      'You\'re not to blame that helping your child is expensive. The system is expensive, not you "bad at math."',
+      'Separate "there\'s objectively little money" from "I manage badly." These differ, and the first isn\'t your fault.',
+      'If you\'re not the one making money decisions and it\'s unsafe — don\'t start the conversation today.',
+      'You\'re handling a financial load most people can\'t even imagine. That\'s a fact.',
+    ]},
+  ],
+  oporCards:[
+    'It\'s okay to get nothing done today. The world won\'t collapse.',
+    'You\'ve already done enough. Even if it doesn\'t feel like it.',
+    'You don\'t have to be resourceful every day.',
+    'You can cancel plans if there\'s no energy. That\'s not weakness.',
+    'Crying isn\'t failure. It\'s a way to release the pressure.',
+    'Your "I\'m tired" has the right to be said out loud.',
+    'You don\'t have to smile when it\'s heavy inside.',
+    'Asking for help is care, not betrayal.',
+    'The perfect mom doesn\'t exist. And never did.',
+    'Even a bad day doesn\'t make you a bad mom.',
+    'Put your feet on the floor. You\'re here.',
+    'Take one slow breath. That\'s enough.',
+    'Look around. Name three things you can see.',
+    'Your body knows when it\'s time to stop.',
+    'Even lying down and breathing, you\'re still caring.',
+    'You don\'t need to solve everything now. Being here is enough.',
+    'Silence is a form of support too.',
+    'Your state matters more than perfect techniques.',
+    'Your child needs a real mom, not a perfect one.',
+    'Being there sometimes matters more than doing it right.',
+    'Even if there was no development today, there was connection.',
+    'Caring for yourself is an investment in your child.',
+    'You don\'t have to carry it all alone.',
+    'Today can simply be gotten through.',
+    'Just being there, even wrung out, is already an enormous feat.',
+  ],
+  silaCards:[
+    'You\'ve already made it through what seemed impossible.',
+    'Look back — how far you\'ve already come.',
+    'Your work isn\'t in vain. Even if the result isn\'t visible — it\'s there.',
+    'Every day you get up and carry on is a victory.',
+    'You\'re moving forward. Even small steps are forward.',
+    'Cry if you need to. Then get up — you know how.',
+    'You won\'t give up. Not because you must — because you love.',
+    'Your child needs you — not a perfect you, just you.',
+    'Even if they don\'t speak — they feel your love.',
+    'Your arms are their safest place.',
+    'Every small bit of progress is your shared victory.',
+    'You\'re showing them: hardship isn\'t the end.',
+    'Your child believes in you more than you do right now.',
+    'Their progress is your work. Don\'t discount it.',
+    'You\'re their voice. Fight for them, don\'t go silent.',
+    'Despair isn\'t the truth. That\'s the exhaustion talking.',
+    'Make one hard call you\'ve been putting off. Today.',
+    'Hope lives in you — even when it\'s out of sight.',
+    'The world isn\'t against you. The path is hard — those are different things.',
+    'You\'re a warrior. Not a victim — a warrior.',
+    'Find one person who understands. Write to them today.',
+    'Praise yourself for something specific. Out loud.',
+    'Your resilience is a choice every day.',
+    'You deserve support. Asking for it is courage.',
+    'You don\'t have to cope beautifully.',
+    'Your love is the most powerful thing your child has.',
+    'You\'re growing along with them. Every challenge makes you stronger.',
+    'Your exhaustion is the trace of the love you give.',
+  ],
+};;
+
+const T = { ru: RU, kz: KZ, en: EN };
+
+
+// STATE
+// ═══════════════════════════════
+let LANG = 'ru';
+function t(){ return T[LANG] || T.ru; }
+function ld(k,d){ try{const v=localStorage.getItem('lola_'+k);return v?JSON.parse(v):d}catch{return d} }
+function sv(k,v){ try{localStorage.setItem('lola_'+k,JSON.stringify(v))}catch{} }
+
+const ST = {
+  activeCat: ld('activeCat','mind'),
+  mode: ld('mode','green'),
+  cardIdx:   ld('cardIdx',{}),
+  doneCards: ld('doneCards',{}),
+  weekDone:  ld('weekDone',{}),
+  momCheck:  ld('momCheck',{}),
+  modDone:   ld('modDone',{sense:0,move:0,speech:0}),
+  notes:     ld('notes',{}),           // {weekNum: [{id,text,ts}]}
+  victories: ld('victories',{}),       // kept for backwards compat
+  currentWeek: ld('currentWeek',1),
+  totalDone:   ld('totalDone',0),
+  weeklyDone:  ld('weeklyDone',{}),
+  mindTab: 'opor',
+  mindIdx: {opor:ld('mindIdxOpor',0), sila:ld('mindIdxSila',0)},
+  mindDone: ld('mindDone',{}),
+  installDate: ld('installDate', null),
+  trialOver:   ld('trialOver', false),
+};
+
+// Trial
+const TRIAL_DAYS = 7;
+function getTrialDaysLeft(){
+  if(!ST.installDate) return TRIAL_DAYS;
+  const diff = Date.now() - ST.installDate;
+  const daysUsed = Math.floor(diff / (1000*60*60*24));
+  return Math.max(0, TRIAL_DAYS - daysUsed);
+}
+function isTrialExpired(){ return false; }
+
+function todayIdx(){ const d=new Date().getDay(); return d===0?6:d-1; }
+
+// ═══════════════════════════════
+// LANG
+// ═══════════════════════════════
+function setLang(lang){
+  LANG=lang; sv('lang',lang);
+  document.getElementById('lang-overlay').classList.add('hidden');
+  document.getElementById('lang-sw').textContent=({ru:'RU',kz:'ҚАЗ',en:'EN'})[lang];
+  applyStatic();
+  // Show welcome screen on first visit
+  const seen=localStorage.getItem('lola_seenWelcome');
+  if(!seen){ showWelcome(); } else { renderAll(); updateTrialBadge(); }
+}
+function showLangPicker(){
+  document.getElementById('lang-overlay').classList.remove('hidden');
+}
+function applyStatic(){
+  const tr=t();
+  // Nav
+  for(let i=0;i<5;i++){
+    const el=document.getElementById('nav'+i);
+    if(el) el.textContent=tr.nav[i];
+  }
+  document.getElementById('hdr-week-lbl').textContent=tr.week;
+  document.getElementById('streak-lbl').textContent=tr.streakLbl;
+  document.getElementById('this-week-lbl').textContent=tr.thisWeek;
+  document.getElementById('lola-mod-lbl').textContent=tr.modLbl;
+  document.getElementById('tap-dots-lbl').textContent=tr.tapDots;
+  document.getElementById('notes-title').textContent=tr.notesTitle;
+  document.getElementById('notes-add-btn').textContent=tr.notesAdd;
+  document.getElementById('note-inp').placeholder=tr.notePh||'...';
+  document.getElementById('tab-opor').textContent=tr.oporaTab;
+  document.getElementById('tab-sila').textContent=tr.silaTab;
+  document.getElementById('mind-intro-title').textContent=tr.mindIntroTitle||'Поддержка мамы';
+  document.getElementById('mind-intro-p').textContent=tr.oporaDesc||'';
+  document.getElementById('prog-lbl').textContent=tr.totalLbl;
+  document.getElementById('by-weeks-lbl').textContent=tr.byWeeks;
+  document.getElementById('victs-lbl').textContent=tr.victsLbl;
+  document.getElementById('reset-lbl').textContent=tr.resetLbl||'Управление данными';
+  const setTxt=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  setTxt('about-title',tr.aboutTitle);
+  setTxt('about-text',tr.aboutText);
+  setTxt('about-fb-btn',tr.aboutFbBtn);
+  setTxt('about-support-title',tr.aboutSupportTitle);
+  setTxt('about-support-text',tr.aboutSupportText);
+  document.getElementById('reset-week-lbl').textContent=tr.resetWeek;
+  document.getElementById('reset-all-lbl').textContent=tr.resetAll;
+  document.getElementById('tracker-help-lbl').textContent=tr.trackerHelpLbl;
+  document.getElementById('lola-screen-title').textContent=tr.lolaTitle||'LOLA';
+  document.getElementById('lola-screen-sub').textContent=tr.lolaSub||'';
+  document.getElementById('lola-screen-sub').textContent=tr.lolaSub||'';
+  // Mind type desc
+  renderMindTypeDesc();
+}
+
+
+// ═══════════════════════════════
+// WELCOME SCREEN
+// ═══════════════════════════════
+function showWelcome(){
+  const tr=t();
+  document.getElementById('welcome-title').textContent=tr.welcomeTitle||'';
+  document.getElementById('welcome-desc').textContent=tr.welcomeDesc||'';
+  document.getElementById('welcome-for-whom-lbl').textContent=tr.welcomeForWhomLbl||'';
+  document.getElementById('welcome-inside-lbl').textContent=tr.welcomeInsideLbl||'';
+  document.getElementById('welcome-trial-lbl').textContent=tr.welcomeTrialLbl||'';
+  document.getElementById('welcome-cta').textContent=tr.welcomeCta||'Start →';
+  document.getElementById('welcome-author').textContent=tr.welcomeAuthor||'';
+  const fwEl=document.getElementById('welcome-for-whom');
+  if(fwEl) fwEl.innerHTML=(tr.welcomeForWhom||[]).map(i=>
+    `<div style="display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.07);border-radius:10px;padding:10px 12px">
+      <span style="font-size:18px;flex-shrink:0">${i.icon}</span>
+      <span style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.45">${i.text}</span>
+    </div>`).join('');
+  const insEl=document.getElementById('welcome-inside');
+  if(insEl) insEl.innerHTML=(tr.welcomeInside||[]).map(i=>
+    `<div style="background:rgba(255,255,255,.07);border-radius:10px;padding:12px">
+      <div style="font-size:20px;margin-bottom:4px">${i.icon}</div>
+      <div style="font-size:13px;font-weight:500;color:#fff">${i.label}</div>
+      <div style="font-size:11px;color:var(--peachl);margin-top:2px">${i.sub}</div>
+    </div>`).join('');
+  document.getElementById('welcome-overlay').classList.remove('hidden');
+}
+
+function startFromWelcome(){
+  document.getElementById('welcome-overlay').classList.add('hidden');
+  sv('seenWelcome', true);
+  if(!ST.installDate){ ST.installDate=Date.now(); sv('installDate',ST.installDate); }
+  renderAll();
+  updateTrialBadge();
+}
+
+// ═══════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════
+function showOnboarding(){
+  const tr=t();
+  const el=document.getElementById('onboard-inner');
+  el.innerHTML=`
+    <div class="onboard-logo">LOLA System</div>
+    <div class="onboard-sub">Love · Observation · Logic · Analysis</div>
+    ${(tr.onboardSteps||[]).map(s=>`
+      <div class="onboard-step">
+        <div class="step-icon" style="background:${s.bg}">${s.icon}</div>
+        <div class="step-body"><h3>${s.title}</h3><p>${s.desc}</p></div>
+      </div>`).join('')}
+    <div class="onboard-divider"></div>
+    <button class="btn-start" onclick="startApp()">${tr.startBtn||'Начать'}</button>
+    <div style="font-size:11px;color:var(--grey);text-align:center;margin-top:12px">
+      ${tr.trialInfo||''}
+    </div>`;
+  document.getElementById('onboard-overlay').classList.remove('hidden');
+}
+
+function startApp(){
+  document.getElementById('onboard-overlay').classList.add('hidden');
+  sv('seenOnboard', true);
+  if(!ST.installDate){ ST.installDate=Date.now(); sv('installDate',ST.installDate); }
+  renderAll();
+  updateTrialBadge();
+}
+
+function showTrialInfo(){
+  const left=getTrialDaysLeft();
+  const tr=t();
+  alert(`${tr.week}: ${TRIAL_DAYS} дней пробного периода\nОсталось: ${left} дней`);
+}
+
+function showTrial(){ document.getElementById('trial-overlay').classList.add('hidden'); }
+function goToPay(){ window.open('https://t.me/Baggi_S','_blank'); }
+
+function updateTrialBadge(){
+  // Приложение бесплатное — бейдж пробного периода не показываем
+  const badge=document.getElementById('trial-badge');
+  if(badge) badge.style.display='none';
+}
+
+// ═══════════════════════════════
+// RENDER
+// ═══════════════════════════════
+function renderAll(){
+  applyStatic();
+  document.getElementById('hdr-week-num').textContent=ST.currentWeek;
+  renderModes(); renderCats(); renderCard(); renderStreak();
+  renderWeekGrid(); renderModules(); renderNotes();
+  const d=new Date(),mon=new Date(d);
+  mon.setDate(d.getDate()-todayIdx());
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  document.getElementById('week-dates').textContent=
+    `${mon.getDate()}.${mon.getMonth()+1}–${sun.getDate()}.${sun.getMonth()+1}`;
+}
+
+const MODES=[
+  {id:'red',emoji:'🔴',color:'#C0603A',bg:'#F7E9E2'},
+  {id:'yellow',emoji:'🟡',color:'#C4892A',bg:'#FBF3E8'},
+  {id:'green',emoji:'🟢',color:'#5A9B87',bg:'#EAF5F1'},
+];
+function modeCap(){
+  // 🔴 тяжело — только первые щадящие; 🟡 средне; 🟢 всё
+  if(ST.mode==='red') return 6;
+  if(ST.mode==='yellow') return 14;
+  return 999;
+}
+function renderModes(){
+  const bar=document.getElementById('mode-bar');
+  const hint=document.getElementById('mode-hint');
+  if(!bar) return;
+  const tr=t();
+  const labels=(tr.modeLabels)||{red:'Тяжело',yellow:'Немного сил',green:'Есть ресурс'};
+  const hints=(tr.modeHints)||{red:'Показываю только самые лёгкие карточки',yellow:'Карточки полегче',green:'Все карточки'};
+  bar.innerHTML=MODES.map(m=>{
+    const on=ST.mode===m.id;
+    return `<div class="mode-chip" style="background:${on?m.bg:'#fff'};color:${on?m.color:'#9A948C'};border-color:${on?m.color:'#E5E0D8'}" onclick="setMode('${m.id}')">${m.emoji}<br>${labels[m.id]}</div>`;
+  }).join('');
+  if(hint) hint.textContent=hints[ST.mode]||'';
+}
+function setMode(id){
+  ST.mode=id; sv('mode',id);
+  // reset current card index so capped view starts fresh
+  renderModes(); renderCard();
+}
+
+function renderCats(){
+  const tr=t();
+  document.getElementById('cat-row').innerHTML=tr.cats.map(c=>{
+    const a=ST.activeCat===c.id;
+    return `<div class="cat-chip" style="background:${a?c.color:'#fff'};color:${a?'#fff':c.color};border-color:${a?c.color:c.color+'40'}" onclick="selectCat('${c.id}')">${c.label}</div>`;
+  }).join('');
+}
+
+function renderCard(){
+  const tr=t();
+  const cat=tr.cats.find(c=>c.id===ST.activeCat);
+  if(!cat) return;
+  const total=Math.min(cat.cards.length, modeCap());
+  const idx=(ST.cardIdx[cat.id]||0)%total;
+  const key=`${cat.id}_${idx}`;
+  const done=!!ST.doneCards[key];
+  const prevIdx=(idx-1+total)%total;
+  const nextIdx=(idx+1)%total;
+  document.getElementById('card-wrap').innerHTML=`
+    <div class="day-card" style="background:${cat.bg}">
+      <div class="card-deco" style="background:${cat.color}"></div>
+      <div class="card-cat" style="color:${cat.color}">${cat.label}</div>
+      <div class="card-text">${cat.cards[idx]}</div>
+      <div class="card-counter">
+        <span>${tr.cardOf} ${idx+1} ${tr.cardFrom} ${total}</span>
+        ${done?`<span style="color:${cat.color};font-size:12px">✓</span>`:''}
+      </div>
+      <div class="card-nav">
+        <button class="btn-prev" onclick="gotoCard('${cat.id}',${prevIdx})">‹</button>
+        ${done
+          ?`<div class="done-state" style="flex:1;background:${cat.color}18;color:${cat.color};justify-content:center">${tr.doneState}</div>`
+          :`<button class="btn-done" onclick="markDone('${cat.id}',${idx})" style="background:${cat.color};color:#fff">${tr.doneTxt}</button>`
+        }
+        <button class="btn-next" onclick="gotoCard('${cat.id}',${nextIdx})">›</button>
+      </div>
+    </div>`;
+}
+
+function renderStreak(){
+  const tr=t();
+  const ti=todayIdx();
+  document.getElementById('streak-days').innerHTML=tr.days.map((d,i)=>`
+    <div class="s-day">
+      <div class="s-dot ${ST.weekDone[i]?'done':i===ti?'today':''}"></div>
+      <span class="s-lbl">${d}</span>
+    </div>`).join('');
+  const cnt=Object.values(ST.weekDone).filter(Boolean).length;
+  document.getElementById('streak-cnt').textContent=`${cnt} / 7`;
+}
+
+function renderWeekGrid(){
+  const tr=t();
+  const ti=todayIdx();
+  document.getElementById('week-grid').innerHTML=tr.days.map((d,i)=>`
+    <div class="day-cell">
+      <span class="day-name">${d}</span>
+      <div class="day-box ${ST.weekDone[i]?'done':''} ${i===ti?'today':''}" onclick="toggleDay(${i})">
+        ${ST.weekDone[i]?'✓':''}
+      </div>
+    </div>`).join('');
+}
+
+function renderModules(){
+  // Трекер СОСТОЯНИЯ МАМЫ (вместо занятий ребёнка) — чек-боксы + пункты про включённость взрослого
+  const wrap=document.getElementById('mods-wrap');
+  if(!wrap) return;
+  const items=(t().momState)||[];
+  if(!ST.momCheck) ST.momCheck={};
+  wrap.innerHTML=items.map(it=>{
+    const on=!!ST.momCheck[it.id];
+    return `<div class="mod-card" onclick="toggleMomState('${it.id}')" style="cursor:pointer">
+      <div class="mod-icon" style="background:${on?'#5A9B87':'#D9D4CC'}"><span>${on?'✓':''}</span></div>
+      <div class="mod-info"><div class="mod-name" style="font-size:14px">${it.txt}</div>${it.hint?`<div class="mod-sub">${it.hint}</div>`:''}</div>
+    </div>`;
+  }).join('');
+}
+function toggleMomState(id){
+  if(!ST.momCheck) ST.momCheck={};
+  ST.momCheck[id]=!ST.momCheck[id];
+  sv('momCheck',ST.momCheck);
+  renderModules();
+}
+
+function renderNotes(){
+  const wk=ST.currentWeek;
+  const notes=(ST.notes[wk])||[];
+  const list=document.getElementById('notes-list');
+  if(!list) return;
+  list.innerHTML=notes.length
+    ? notes.map(n=>`
+        <div class="note-item">
+          <span class="note-star">⭐</span>
+          <span class="note-text">${escHtml(n.text)}</span>
+          <button class="note-del" onclick="deleteNote(${n.id})">×</button>
+        </div>`).join('')
+    : `<div style="font-size:12px;color:var(--grey);padding:6px 0;text-align:center">${t().victEmpty||'...'}</div>`;
+}
+
+function renderMindTypeDesc(){
+  const tr=t();
+  const desc=ST.mindTab==='opor'?tr.oporaDesc:tr.silaDesc;
+  const el=document.getElementById('mind-type-desc');
+  if(el) el.textContent=desc||'';
+}
+
+function renderMind(){
+  const tr=t();
+  const data=ST.mindTab==='opor'?tr.oporCards:tr.silaCards;
+  const idx=ST.mindIdx[ST.mindTab]%data.length;
+  const key=`${ST.mindTab}_${idx}`;
+  const done=!!ST.mindDone[key];
+  const color=ST.mindTab==='opor'?'#5A9B87':'#7B6BAE';
+  const bg=ST.mindTab==='opor'?'#EAF5F1':'#F0EDF8';
+  const label=ST.mindTab==='opor'?tr.oporaLbl:tr.silaLbl;
+  renderMindTypeDesc();
+  document.getElementById('mind-card-wrap').innerHTML=`
+    <div class="mind-card" style="background:${bg}">
+      <div>
+        <div class="mind-badge" style="color:${color}">${label}</div>
+        <div class="mind-text" style="color:#1A1A1A">${data[idx]}</div>
+      </div>
+      <div class="mind-foot">
+        <span class="mind-num" style="color:${color}">${idx+1} / ${data.length}</span>
+        ${done?`<span style="font-size:12px;color:${color}">✓</span>`:''}
+      </div>
+    </div>`;
+  document.getElementById('mind-acts').innerHTML=`
+    <button class="btn-done" onclick="markMindDone()" style="background:${color};color:#fff;flex:1">
+      ${done?'✓ '+tr.readBtn:tr.readBtn}
+    </button>
+    <button style="width:44px;padding:11px;border-radius:12px;background:var(--light);border:none;font-size:16px;cursor:pointer" onclick="prevMind()">‹</button>
+    <button style="width:44px;padding:11px;border-radius:12px;background:var(--light);border:none;font-size:16px;cursor:pointer" onclick="nextMind()">›</button>`;
+}
+
+function sharePapa(idx){
+  const tr=t();
+  const all=[];
+  (tr.papaGroups||[]).forEach(g=>g.cards.forEach(c=>all.push(c)));
+  const card=all[idx]; if(!card) return;
+  const intro=tr.papaShareIntro||'Нашла подсказку 💛';
+  const sign=tr.papaShareSign||'';
+  const text=intro+'\n\n«'+card+'»'+(sign?'\n\n'+sign:'');
+  if(window.Telegram?.WebApp && window.Telegram.WebApp.openTelegramLink){
+    const url='https://t.me/share/url?url='+encodeURIComponent(' ')+'&text='+encodeURIComponent(text);
+    window.Telegram.WebApp.openTelegramLink(url);
+    return;
+  }
+  if(navigator.share){ navigator.share({text}).catch(()=>{}); return; }
+  try{
+    navigator.clipboard.writeText(text);
+    if(typeof showToast==='function') showToast(tr.papaShareCopied||'Скопировано ✓');
+  }catch(e){ alert(text); }
+}
+function openFeedback(){
+  const tr=t();
+  const msg=tr.aboutFbMsg||'Отзыв по LOLA: ';
+  const url='https://t.me/Baggi_S?text='+encodeURIComponent(msg);
+  if(window.Telegram?.WebApp && window.Telegram.WebApp.openTelegramLink){
+    window.Telegram.WebApp.openTelegramLink(url);
+  }else{
+    window.open(url,'_blank');
+  }
+}
+function renderLola(){
+  const tr=t();
+  const wrap=document.getElementById('lola-modules-wrap');
+  if(!wrap) return;
+  // Экран «Папа»: карточки для партнёра по подкатегориям + маленькая ссылка на наборы
+  const titleEl=document.getElementById('lola-screen-title');
+  const subEl=document.getElementById('lola-screen-sub');
+  if(titleEl) titleEl.textContent=tr.papaTitle||'Для папы';
+  if(subEl) subEl.textContent=tr.papaSub||'';
+  const groups=tr.papaGroups||[];
+  let gi=0; // running global card index across all groups
+  wrap.innerHTML=groups.map(g=>`
+    <div style="padding:4px 16px 14px">
+      <div style="font-size:13px;font-weight:600;color:${g.color};margin-bottom:8px">${g.title}</div>
+      ${g.cards.map(c=>{
+        const idx=gi++;
+        return `<div style="background:${g.color}12;border:1px solid ${g.color}28;border-radius:12px;padding:11px 13px;margin-bottom:7px">
+          <div style="font-size:13px;line-height:1.45;color:#2A2A2A">${c}</div>
+          <div onclick="sharePapa(${idx})" style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:12px;font-weight:600;color:${g.color};cursor:pointer">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${g.color}" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+            ${tr.papaShareBtn||'Поделиться с папой'}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`).join('')
+    + `<div style="padding:6px 16px 20px">
+        <a href="${tr.papaLink||'#'}" target="_blank" style="display:block;text-align:center;font-size:12px;color:var(--grey);text-decoration:none;padding:10px;border:1px dashed #D9D4CC;border-radius:12px">${tr.papaLinkTxt||'Наборы LOLA →'}</a>
+       </div>`;
+}
+
+function renderProgress(){
+  const tr=t();
+  const total=ST.totalDone;
+  const pct=Math.min(Math.round(total/72*100),100);
+  document.getElementById('prog-num').textContent=total;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  const c=2*Math.PI*28;
+  document.getElementById('prog-circle').style.strokeDashoffset=c-(pct/100)*c;
+  const maxW=Math.max(...Object.values(ST.weeklyDone),1);
+  document.getElementById('weeks-sec').innerHTML=
+    Array.from({length:ST.currentWeek},(_,i)=>{
+      const w=i+1,cnt=ST.weeklyDone[w]||0;
+      return `<div class="week-row"><span class="week-n">${w}</span><div class="week-bg"><div class="week-bar" style="width:${Math.round(cnt/maxW*100)}%"></div></div><span class="week-val">${cnt}</span></div>`;
+    }).join('');
+  // Collect all notes as victories
+  const allNotes=[];
+  Object.entries(ST.notes).forEach(([wk,ns])=>ns.forEach(n=>allNotes.push({wk,text:n.text})));
+  document.getElementById('victs-sec').innerHTML=allNotes.length
+    ?allNotes.map(v=>`<div class="v-item"><div class="v-week">${tr.week} ${v.wk}</div><div class="v-text">${escHtml(v.text)}</div></div>`).join('')
+    :`<div style="text-align:center;padding:20px;color:var(--grey);font-size:13px">${tr.victEmpty||'...'}</div>`;
+}
+
+// ═══════════════════════════════
+// ACTIONS
+// ═══════════════════════════════
+function selectCat(id){ ST.activeCat=id; sv('activeCat',id); renderCats(); renderCard(); }
+
+function gotoCard(catId, idx){
+  if(!ST.cardIdx) ST.cardIdx={};
+  ST.cardIdx[catId]=idx; sv('cardIdx',ST.cardIdx); renderCard();
+}
+
+function markDone(catId,idx){
+  const key=`${catId}_${idx}`;
+  if(ST.doneCards[key]) return;
+  ST.doneCards[key]=true; sv('doneCards',ST.doneCards);
+  ST.weekDone[todayIdx()]=true; sv('weekDone',ST.weekDone);
+  ST.totalDone++; sv('totalDone',ST.totalDone);
+  ST.weeklyDone[ST.currentWeek]=(ST.weeklyDone[ST.currentWeek]||0)+1; sv('weeklyDone',ST.weeklyDone);
+  renderCard(); renderStreak(); renderWeekGrid();
+  toast(t().toastDone);
+  if(window.Telegram?.WebApp) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+}
+
+function toggleDay(i){ ST.weekDone[i]=!ST.weekDone[i]; sv('weekDone',ST.weekDone); renderWeekGrid(); renderStreak(); }
+function toggleMod(id,val){ ST.modDone[id]=ST.modDone[id]===val?val-1:val; sv('modDone',ST.modDone); renderModules(); }
+
+// Notes
+function addNoteMode(){
+  const wrap=document.getElementById('note-inp-wrap');
+  wrap.classList.remove('hidden');
+  document.getElementById('note-inp').focus();
+}
+function submitNote(){
+  const inp=document.getElementById('note-inp');
+  const text=inp.value.trim();
+  if(!text) return;
+  const wk=ST.currentWeek;
+  if(!ST.notes[wk]) ST.notes[wk]=[];
+  ST.notes[wk].push({id:Date.now(),text,ts:Date.now()});
+  sv('notes',ST.notes);
+  inp.value='';
+  document.getElementById('note-inp-wrap').classList.add('hidden');
+  renderNotes();
+  toast(t().toastSaved||'✓');
+}
+function deleteNote(id){
+  const wk=ST.currentWeek;
+  ST.notes[wk]=(ST.notes[wk]||[]).filter(n=>n.id!==id);
+  sv('notes',ST.notes); renderNotes();
+}
+
+// Mind
+function switchMindTab(tab){
+  ST.mindTab=tab;
+  document.getElementById('tab-opor').classList.toggle('active',tab==='opor');
+  document.getElementById('tab-sila').classList.toggle('active',tab==='sila');
+  renderMind();
+}
+function markMindDone(){
+  const key=`${ST.mindTab}_${ST.mindIdx[ST.mindTab]}`;
+  ST.mindDone[key]=true; sv('mindDone',ST.mindDone); renderMind(); toast(t().toastRead);
+}
+function nextMind(){
+  const data=ST.mindTab==='opor'?t().oporCards:t().silaCards;
+  ST.mindIdx[ST.mindTab]=(ST.mindIdx[ST.mindTab]+1)%data.length;
+  sv('mindIdx'+ST.mindTab[0].toUpperCase()+ST.mindTab.slice(1),ST.mindIdx[ST.mindTab]);
+  renderMind();
+}
+function prevMind(){
+  const data=ST.mindTab==='opor'?t().oporCards:t().silaCards;
+  const len=data.length;
+  ST.mindIdx[ST.mindTab]=(ST.mindIdx[ST.mindTab]-1+len)%len;
+  sv('mindIdx'+ST.mindTab[0].toUpperCase()+ST.mindTab.slice(1),ST.mindIdx[ST.mindTab]);
+  renderMind();
+}
+
+function switchScreen(name,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('content').scrollTo(0,0);
+  if(name==='progress') renderProgress();
+  if(name==='mind') renderMind();
+  if(name==='lola') renderLola();
+}
+
+function toggleHelp(id){
+  const box=document.getElementById(id+'-help-box');
+  if(!box) return;
+  const hidden=box.classList.contains('hidden');
+  box.classList.toggle('hidden',!hidden);
+  if(hidden) box.innerHTML=t().trackerHelp||'';
+}
+
+// Reset
+let pendingReset=null;
+function confirmReset(type){
+  const tr=t();
+  pendingReset=type;
+  document.getElementById('modal-title').textContent=type==='week'?(tr.resetWeekTitle||'Новая неделя'):(tr.resetAllTitle||'Полный сброс');
+  document.getElementById('modal-body').textContent=type==='week'?(tr.resetWeekBody||''):(tr.resetAllBody||'');
+  document.getElementById('modal-cancel').textContent=tr.cancel||'Отмена';
+  document.getElementById('modal-confirm').textContent=tr.confirm||'Сбросить';
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-bg').classList.remove('open'); pendingReset=null; }
+function doReset(){
+  closeModal();
+  if(pendingReset==='week'){
+    ST.weekDone={}; sv('weekDone',{});
+    ST.modDone={sense:0,move:0,speech:0}; sv('modDone',{sense:0,move:0,speech:0});
+    ST.currentWeek++; sv('currentWeek',ST.currentWeek);
+  } else {
+    ['activeCat','cardIdx','doneCards','weekDone','modDone','notes','victories',
+     'currentWeek','totalDone','weeklyDone','mindDone','mindIdxOpor','mindIdxSila']
+      .forEach(k=>{try{localStorage.removeItem('lola_'+k)}catch{}});
+    Object.assign(ST,{activeCat:'mind',cardIdx:{},doneCards:{},weekDone:{},
+      modDone:{sense:0,move:0,speech:0},notes:{},victories:{},currentWeek:1,
+      totalDone:0,weeklyDone:{},mindDone:{},mindIdx:{opor:0,sila:0}});
+  }
+  renderAll(); renderProgress();
+  toast('✓ Готово');
+}
+
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2000);
+}
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  if(window.Telegram?.WebApp){
+    const tg=window.Telegram.WebApp; tg.ready(); tg.expand();
+    // Get Telegram user info for future backend auth
+    const user=tg.initDataUnsafe?.user;
+    if(user){ sv('tgUserId',user.id); sv('tgUsername',user.username||''); }
+  }
+
+  const savedLang=localStorage.getItem('lola_lang');
+  if(savedLang&&T[savedLang]){
+    LANG=savedLang;
+    document.getElementById('lang-overlay').classList.add('hidden');
+    document.getElementById('lang-sw').textContent=({ru:'RU',kz:'ҚАЗ',en:'EN'})[savedLang];
+
+    const seenWelcome=localStorage.getItem('lola_seenWelcome');
+    if(!seenWelcome){
+      applyStatic();
+      showWelcome();
+    } else {
+      if(!ST.installDate){ ST.installDate=Date.now(); sv('installDate',ST.installDate); }
+      applyStatic();
+      renderAll();
+      updateTrialBadge();
+    }
+  }
+  // else: lang overlay stays visible
+});
+</script>
+
+
+</body></html>
